@@ -1,26 +1,346 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
+/* :root {
+	--font-size: 16px;
+	--background: oklch(0.98 0.01 280);
+	--foreground: oklch(0.09 0.01 280);
+	--card: oklch(0.99 0.01 280);
+	--card-foreground: oklch(0.09 0.01 280);
+	--popover: oklch(0.99 0.01 280);
+	--popover-foreground: oklch(0.09 0.01 280);
+	--primary: oklch(0.64 0.27 308);
+	--primary-foreground: oklch(0.99 0 0);
+	--secondary: oklch(0.19 0.05 260);
+	--secondary-foreground: oklch(0.12 0.01 280);
+	--muted: oklch(0.95 0.01 280);
+	--muted-foreground: oklch(0.43 0.02 280);
+	--accent: oklch(0.75 0.22 340);
+	--accent-foreground: oklch(0.99 0 0);
+	--destructive: oklch(0.55 0.22 25);
+	--destructive-foreground: oklch(0.99 0 0);
+	--border: oklch(0.86 0.01 280 / 0.55);
+	--input: oklch(0.97 0.01 280);
+	--input-background: oklch(0.99 0.01 280);
+	--switch-background: oklch(0.87 0.01 280);
+	--font-weight-medium: 500;
+	--font-weight-normal: 400;
+	--ring: oklch(0.64 0.27 308 / 0.35);
+	--chart-1: oklch(0.64 0.27 308);
+	--chart-2: oklch(0.72 0.24 340);
+	--chart-3: oklch(0.58 0.22 270);
+	--chart-4: oklch(0.68 0.2 200);
+	--chart-5: oklch(0.75 0.18 160);
+	--radius: 0.75rem;
+	--sidebar: oklch(0.99 0.01 280);
+	--sidebar-foreground: oklch(0.09 0.01 280);
+	--sidebar-primary: oklch(0.64 0.27 308);
+	--sidebar-primary-foreground: oklch(0.99 0 0);
+	--sidebar-accent: oklch(0.19 0.05 260);
+	--sidebar-accent-foreground: oklch(0.12 0.01 280);
+	--sidebar-border: oklch(0.86 0.01 280 / 0.55);
+	--sidebar-ring: oklch(0.64 0.27 308 / 0.35);
+} */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+	/* Page - Keeping the cool, clean white */
+	--background: oklch(0.99 0.01 280);
+	--foreground: oklch(
+		0.14 0.02 280
+	); /* Softened slightly from 0.09 for less eye strain */
+
+	/* Level 1 - Elevated surfaces (Cards/Popovers) */
+	--card: oklch(1 0 0); /* Pure white to pop slightly off the 0.99 background */
+	--card-foreground: var(--foreground);
+	--popover: oklch(1 0 0);
+	--popover-foreground: var(--foreground);
+
+	/* Brand - Your vibrant pink/purple */
+	--primary: oklch(0.64 0.27 308);
+	--primary-foreground: oklch(0.99 0 0); /* Pure White */
+
+	--accent: oklch(0.75 0.22 340);
+	--accent-foreground: oklch(0.99 0 0);
+
+	/* Level 2 - THE MAJOR FIX (Secondary actions) */
+	/* Lifted from 0.19 (black) to 0.95 (soft interactive tint) */
+	--secondary: oklch(0.95 0.015 280);
+	--secondary-foreground: oklch(
+		0.2 0.02 280
+	); /* Dark text for clear contrast */
+
+	/* Level 3 - Muted / Disabled */
+	--muted: oklch(0.96 0.01 280);
+	--muted-foreground: oklch(0.5 0.02 280);
+
+	/* Inputs */
+	--input: oklch(92.497% 0.02468 278.332);
+	--input-background: oklch(0.99 0.01 280);
+	--switch-background: oklch(0.87 0.01 280);
+
+	/* Borders - Removed the / 0.55 opacity for clean backdrop-blur support */
+	--border: oklch(89.529% 0.0112 274.854);
+	--ring: oklch(0.64 0.27 308 / 0.35);
+
+	/* Destructive & Charts - Untouched */
+	--destructive: oklch(0.55 0.22 25);
+	--destructive-foreground: oklch(0.99 0 0);
+	--chart-1: oklch(0.64 0.27 308);
+	--chart-2: oklch(0.72 0.24 340);
+	--chart-3: oklch(0.58 0.22 270);
+	--chart-4: oklch(0.68 0.2 200);
+	--chart-5: oklch(0.75 0.18 160);
+
+	/* Typography & Radius */
+	--font-size: 16px;
+	--font-weight-medium: 500;
+	--font-weight-normal: 400;
+	--radius: 0.75rem;
+
+	/* Sidebar - Fixed hover states and borders */
+	--sidebar: oklch(0.98 0.01 280); /* Slightly offset from main background */
+	--sidebar-foreground: var(--foreground);
+	--sidebar-primary: var(--primary);
+	--sidebar-primary-foreground: var(--primary-foreground);
+
+	/* Fixed accent from near-black to soft light hover state */
+	--sidebar-accent: oklch(0.94 0.02 280);
+	--sidebar-accent-foreground: oklch(0.2 0.02 280);
+	--sidebar-border: oklch(0.9 0.01 280);
+	--sidebar-ring: var(--ring);
+}
+
+/* .dark {
+	--background: oklch(0.075 0.018 280);
+	--foreground: oklch(0.96 0.006 280);
+	--card: oklch(0.11 0.022 280);
+	--card-foreground: oklch(0.96 0.006 280);
+	--popover: oklch(0.11 0.022 280);
+	--popover-foreground: oklch(0.96 0.006 280);
+	--primary: oklch(0.64 0.27 308);
+	--primary-foreground: oklch(0.99 0 0);
+	--secondary: oklch(0.15 0.03 280);
+	--secondary-foreground: oklch(0.85 0.01 280);
+	--muted: oklch(0.14 0.02 280);
+	--muted-foreground: oklch(0.55 0.03 280);
+	--accent: oklch(0.72 0.24 340);
+	--accent-foreground: oklch(0.99 0 0);
+	--destructive: oklch(0.55 0.22 25);
+	--destructive-foreground: oklch(0.99 0 0);
+	--border: oklch(0.22 0.03 280 / 0.6);
+	--input: oklch(0.15 0.025 280);
+	--ring: oklch(0.64 0.27 308 / 0.5);
+	--font-weight-medium: 500;
+	--font-weight-normal: 400;
+	--chart-1: oklch(0.64 0.27 308);
+	--chart-2: oklch(0.72 0.24 340);
+	--chart-3: oklch(0.58 0.22 270);
+	--chart-4: oklch(0.68 0.2 200);
+	--chart-5: oklch(0.75 0.18 160);
+	--sidebar: oklch(0.1 0.02 280);
+	--sidebar-foreground: oklch(0.96 0.006 280);
+	--sidebar-primary: oklch(0.64 0.27 308);
+	--sidebar-primary-foreground: oklch(0.99 0 0);
+	--sidebar-accent: oklch(0.15 0.03 280);
+	--sidebar-accent-foreground: oklch(0.85 0.01 280);
+	--sidebar-border: oklch(0.22 0.03 280 / 0.6);
+	--sidebar-ring: oklch(0.64 0.27 308 / 0.5);
+} */
+
+.dark-y {
+	/* Page  */
+	--background: oklch(0.09 0.015 275);
+	--foreground: oklch(0.97 0.004 275);
+
+	/* Level 1 */
+	--card: oklch(0.14 0.018 275);
+	--card-foreground: var(--foreground);
+
+	/* Level 2 */
+	--secondary: oklch(0.18 0.02 275);
+	--secondary-foreground: oklch(0.93 0.005 275);
+
+	/* Level 3 */
+	--muted: oklch(0.22 0.018 275);
+	--muted-foreground: oklch(0.72 0.01 275);
+
+	/* Floating UI */
+	--popover: oklch(0.15 0.018 275);
+	--popover-foreground: var(--foreground);
+
+	/* Inputs */
+	--input: oklch(0.17 0.018 275);
+	--input-background: oklch(0.17 0.018 275);
+
+	/* Borders */
+	--border: oklch(0.28 0.015 275 / 0.6);
+
+	/* Brand */
+	--primary: oklch(0.69 0.23 285);
+	--primary-foreground: white;
+
+	--accent: oklch(0.75 0.18 325);
+	--accent-foreground: white;
+
+	--ring: oklch(0.69 0.23 285 / 0.45);
+
+	/* Sidebar */
+	--sidebar: oklch(0.12 0.016 275);
+	--sidebar-foreground: var(--foreground);
+	--sidebar-accent: oklch(0.18 0.02 275);
+	--sidebar-accent-foreground: var(--foreground);
+	--sidebar-border: oklch(0.25 0.018 275 / 0.55);
+	--sidebar-ring: oklch(0.69 0.23 285 / 0.35);
+}
+
+.dark {
+	/* Page - Kept deep and rich */
+	--background: oklch(0.1 0.015 275);
+	--foreground: oklch(0.97 0.005 275);
+
+	/* Level 1 - Base Surfaces */
+	--card: oklch(0.15 0.02 275);
+	--card-foreground: var(--foreground);
+
+	/* Floating UI - Slightly lifted above cards */
+	--popover: oklch(0.17 0.02 275);
+	--popover-foreground: var(--foreground);
+
+	/* Level 2 - Secondary Actions (The Fix) */
+	/* Lifted L to 0.26 and boosted Chroma to 0.03 for a subtle tint */
+	--secondary: oklch(0.26 0.03 275);
+	--secondary-foreground: oklch(0.98 0.005 275);
+
+	/* Level 3 - Muted / Disabled states */
+	/* Kept lower than secondary so active elements pop */
+	--muted: oklch(0.2 0.02 275);
+	--muted-foreground: oklch(0.7 0.015 275);
+
+	/* Inputs */
+	--input: oklch(28.397% 0.0322 271.582);
+	--input-background: oklch(0.18 0.02 275);
+
+	/* Borders */
+	/* Removed the opacity (0.6) and made it solid to prevent backdrop-blur bleed-through */
+	--border: oklch(29.629% 0.02198 277.553);
+
+	/* Brand - Kept your vibrant purple and pink */
+	--primary: oklch(0.69 0.23 285);
+	--primary-foreground: white;
+
+	--accent: oklch(0.75 0.18 325);
+	--accent-foreground: white;
+
+	--ring: oklch(0.69 0.23 285 / 0.5);
+
+	/* Sidebar */
+	--sidebar: oklch(0.12 0.016 275);
+	--sidebar-foreground: var(--foreground);
+	--sidebar-accent: oklch(0.22 0.025 275);
+	--sidebar-accent-foreground: var(--foreground);
+	--sidebar-border: oklch(0.22 0.02 275);
+	--sidebar-ring: var(--ring);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-input-background: var(--input-background);
+	--color-switch-background: var(--switch-background);
+	--color-ring: var(--ring);
+	--color-chart-1: var(--chart-1);
+	--color-chart-2: var(--chart-2);
+	--color-chart-3: var(--chart-3);
+	--color-chart-4: var(--chart-4);
+	--color-chart-5: var(--chart-5);
+	--radius-sm: calc(var(--radius) - 4px);
+	--radius-md: calc(var(--radius) - 2px);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) + 4px);
+	--color-sidebar: var(--sidebar);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-ring: var(--sidebar-ring);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+	body {
+		@apply bg-background text-foreground;
+	}
+
+	/**
+  * Default typography styles for HTML elements (h1-h4, p, label, button, input).
+  * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
+  */
+
+	html {
+		font-size: var(--font-size);
+	}
+
+	h1 {
+		font-size: var(--text-2xl);
+		font-weight: var(--font-weight-medium);
+		line-height: 1.5;
+	}
+
+	h2 {
+		font-size: var(--text-xl);
+		font-weight: var(--font-weight-medium);
+		line-height: 1.5;
+	}
+
+	h3 {
+		font-size: var(--text-lg);
+		font-weight: var(--font-weight-medium);
+		line-height: 1.5;
+	}
+
+	h4 {
+		font-size: var(--text-base);
+		font-weight: var(--font-weight-medium);
+		line-height: 1.5;
+	}
+
+	label {
+		font-size: var(--text-base);
+		font-weight: var(--font-weight-medium);
+		line-height: 1.5;
+	}
+
+	button {
+		font-size: var(--text-base);
+		font-weight: var(--font-weight-medium);
+		line-height: 1.5;
+	}
+
+	input {
+		font-size: var(--text-base);
+		font-weight: var(--font-weight-normal);
+		line-height: 1.5;
+	}
 }

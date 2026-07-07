@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 140" width="500" height="140">
+  <defs>
+    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="100%" stop-color="#EC4899" />
+    </linearGradient>
+  </defs>
+
+  <!-- Dark background app icon -->
+  <rect x="10" y="10" width="120" height="120" rx="28" fill="#0D0D1A"/>
+  <rect x="14" y="14" width="112" height="112" rx="24" fill="url(#brandGradient)" opacity="0.15"/>
+  
+  <!-- Shopping Bag (dark mode) -->
+  <path d="M45 50 L45 40 C45 32 55 32 55 40 L55 50" 
+        stroke="white" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <path d="M38 50 L38 88 C38 96 62 96 62 88 L62 50 Z" 
+        fill="white" opacity="0.85"/>
+  <polygon points="50,65 46,78 52,78 48,91 58,76 52,76 55,65" 
+           fill="#8B5CF6"/>
+
+  <!-- Text: ShopEase (Dark mode) -->
+  <text x="150" y="78" 
+        font-family="'Inter', 'Segoe UI', system-ui, sans-serif" 
+        font-size="48" font-weight="700" fill="white" letter-spacing="-1">
+    Shop
+  </text>
+  <text x="273" y="78" 
+        font-family="'Inter', 'Segoe UI', system-ui, sans-serif" 
+        font-size="48" font-weight="300" fill="#A855F7" letter-spacing="-1">
+    Ease
+  </text>
+
+  <text x="150" y="105" 
+        font-family="'Inter', 'Segoe UI', system-ui, sans-serif" 
+        font-size="14" font-weight="400" fill="#9CA3AF" letter-spacing="2">
+    SMART SHOPPING • FAST DELIVERY
+  </text>
+</svg>

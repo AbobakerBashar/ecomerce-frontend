@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 140" width="500" height="140">
+  <defs>
+    <!-- Gradient using your primary and accent colors -->
+    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="50%" stop-color="#A855F7" />
+      <stop offset="100%" stop-color="#EC4899" />
+    </linearGradient>
+    
+    <!-- Subtle glow filter -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background circle (app icon style) -->
+  <rect x="10" y="10" width="120" height="120" rx="28" fill="url(#brandGradient)"/>
+  
+  <!-- Shopping Bag Handle -->
+  <path d="M45 50 L45 40 C45 32 55 32 55 40 L55 50" 
+        stroke="white" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Shopping Bag Body -->
+  <path d="M38 50 L38 88 C38 96 62 96 62 88 L62 50 Z" 
+        fill="white" opacity="0.92"/>
+  
+  <!-- Shopping Bag Fold/Flap detail -->
+  <line x1="38" y1="58" x2="62" y2="58" stroke="url(#brandGradient)" stroke-width="2" opacity="0.4"/>
+  
+  <!-- Lightning bolt inside bag (e-commerce speed) -->
+  <polygon points="50,65 46,78 52,78 48,91 58,76 52,76 55,65" 
+           fill="#8B5CF6" opacity="0.85"/>
+
+  <!-- Text: ShopEase -->
+  <text x="150" y="78" 
+        font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif" 
+        font-size="48" 
+        font-weight="700" 
+        fill="#1a1a2e"
+        letter-spacing="-1">
+    Shop
+  </text>
+  <text x="273" y="78" 
+        font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif" 
+        font-size="48" 
+        font-weight="300" 
+        fill="#8B5CF6"
+        letter-spacing="-1">
+    Ease
+  </text>
+
+  <!-- Tagline (optional) -->
+  <text x="150" y="105" 
+        font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif" 
+        font-size="14" 
+        font-weight="400" 
+        fill="#6B7280"
+        letter-spacing="2">
+    SMART SHOPPING • FAST DELIVERY
+  </text>
+</svg>
