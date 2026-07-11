@@ -1,13 +1,14 @@
 "use client";
 
+import { FullProduct } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { Product } from "@/types/product";
+import { Star } from "lucide-react";
 
-function ProductCard({ product }: { product: Product }) {
+function ProductCard({ product }: { product: FullProduct }) {
 	const [selectedColor, setSelectedColor] = useState(
 		product.colors[0]?.name ?? "",
 	);
@@ -22,7 +23,7 @@ function ProductCard({ product }: { product: Product }) {
 		: selectedColorIndex >= 0
 			? selectedColorIndex % product.images.length
 			: 0;
-	const imageSrc = product.images[imageIndex] ?? product.thumbnail;
+	const imageSrc = product.images[imageIndex] ?? product.images[0];
 
 	return (
 		<div
@@ -36,7 +37,8 @@ function ProductCard({ product }: { product: Product }) {
 						src={imageSrc}
 						alt={product.name}
 						fill
-						unoptimized
+						loading="lazy"
+						// unoptimized
 						className="object-cover transition duration-500 ease-out group-hover:scale-105"
 					/>
 					<div className="absolute inset-x-0 top-4 flex flex-wrap gap-2 px-4">
@@ -52,7 +54,9 @@ function ProductCard({ product }: { product: Product }) {
 			<div className="space-y-4 p-5">
 				<div className="flex items-center justify-between gap-3 text-sm text-muted-foreground">
 					<span>{product.brand}</span>
-					<span>{product.rating.toFixed(1)} ★</span>
+					<span>
+						{(0).toFixed(1)} <Star className="h-3 w-3" />
+					</span>
 				</div>
 				<div className="space-y-2">
 					<Link

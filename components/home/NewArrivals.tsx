@@ -1,12 +1,22 @@
-"use client";
-
+import { getFeaturedProducts } from "@/lib/product";
+import { NewArrivalProduct } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
-import { products } from "@/lib/data";
 
-const arrivals = products.filter((product) => product.newArrival);
+const getProducts = async (): Promise<NewArrivalProduct[]> => {
+	try {
+		const res = await getFeaturedProducts();
+		if (res.success) return res.products;
+		return [];
+	} catch (error) {
+		console.log(error);
+		return [];
+	}
+};
 
-export default function NewArrivals() {
+export default async function NewArrivals() {
+	const arrivals = await getProducts();
+
 	return (
 		<section className="space-y-8">
 			<div className="flex flex-col gap-3 text-center">
@@ -32,6 +42,7 @@ export default function NewArrivals() {
 								src={product.images[0]}
 								alt={product.name}
 								fill
+								sizes="100%"
 								className="object-cover object-center transition duration-500 group-hover:scale-105"
 								loading="lazy"
 							/>

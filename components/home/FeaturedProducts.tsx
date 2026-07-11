@@ -1,7 +1,21 @@
-import { products } from "@/lib/data";
+import { getFeaturedProducts } from "@/lib/product";
+import type { FullProduct } from "@/types/product";
 import ProductCard from "../collections/ProductCard";
 
-const FeaturedProducts = () => {
+const getProducts = async (): Promise<FullProduct[]> => {
+	try {
+		const res = await getFeaturedProducts();
+		if (res.success) return res.products;
+		return [];
+	} catch (error) {
+		console.log(error);
+		return [];
+	}
+};
+
+const FeaturedProducts = async () => {
+	const products = await getProducts();
+
 	return (
 		<section id="featured" className="space-y-10">
 			<div className="flex flex-col gap-3 text-center">

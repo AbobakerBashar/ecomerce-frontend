@@ -931,3 +931,63 @@ export const categories = {
 		},
 	],
 };
+
+export const brands = ["Nike", "Adidas", "Puma", "Jordan"];
+
+export const categoriesOptions = [
+	{
+		label: "Shoes",
+		value: "shoes",
+		subCategories: [
+			"Sneakers",
+			"Running Shoes",
+			"Basketball Shoes",
+			"Football Boots",
+			"Training Shoes",
+			"Casual Shoes",
+			"Boots",
+			"Sandals",
+			"Slippers",
+			"Loafers",
+			"Formal Shoes",
+		],
+	},
+	{
+		label: "Apparel",
+		value: "apparel",
+		subCategories: [
+			"T-Shirts",
+			"Shirts",
+			"Hoodies",
+			"Sweatshirts",
+			"Jackets",
+			"Pants",
+			"Jeans",
+			"Shorts",
+			"Tracksuits",
+			"Leggings",
+			"Dresses",
+			"Skirts",
+			"Socks",
+			"Underwear",
+		],
+	},
+	{
+		label: "Accessories",
+		value: "accessories",
+		subCategories: [
+			"Bags",
+			"Backpacks",
+			"Caps",
+			"Hats",
+			"Belts",
+			"Wallets",
+			"Watches",
+			"Sunglasses",
+			"Jewelry",
+			"Scarves",
+			"Gloves",
+			"Water Bottles",
+		],
+	},
+];

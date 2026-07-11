@@ -1,10 +1,10 @@
-import { Product } from "@/types/product";
-import { Button } from "../ui/button";
+import { FullProduct } from "@/types/product";
 import { X } from "lucide-react";
+import { Button } from "../ui/button";
 import ProductCard from "./ProductCard";
 
 interface ProductListProps {
-	filteredProducts: Product[];
+	filteredProducts: FullProduct[];
 	selectedCategory: string;
 	selectedBrand: string;
 	selectedColors: string[];
@@ -16,7 +16,7 @@ interface ProductListProps {
 	clearAllFilters: () => void;
 	setVisibleCount: React.Dispatch<React.SetStateAction<number>>;
 	itemsPerPage: number;
-	visibleProducts: Product[];
+	visibleProducts: FullProduct[];
 }
 
 const ProductsList = ({

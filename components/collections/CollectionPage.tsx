@@ -1,6 +1,5 @@
 "use client";
-
-import { products } from "@/lib/data";
+import { FullProduct } from "@/types/product";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import CollectionsHeader from "./CollectionsHeader";
@@ -17,22 +16,26 @@ const sortOptions = [
 	{ label: "Price: High to Low", value: "price-high" },
 ];
 
-const categoryOptions = Array.from(
-	new Set(products.map((product) => product.category)),
-).sort();
-const brandOptions = Array.from(
-	new Set(products.map((product) => product.brand)),
-).sort();
-const sizeOptions = Array.from(
-	new Set(products.flatMap((product) => product.sizes || [])),
-).sort();
-const colorOptions = Array.from(
-	new Set(
-		products.flatMap((product) => product.colors.map((color) => color.name)),
-	),
-).sort();
+export default function CollectionPage({
+	products,
+}: {
+	products: FullProduct[];
+}) {
+	const categoryOptions = Array.from(
+		new Set(products.map((product) => product.category.name)),
+	).sort();
+	const brandOptions = Array.from(
+		new Set(products.map((product) => product.brand)),
+	).sort();
+	const sizeOptions = Array.from(
+		new Set(products.flatMap((product) => product.sizes || [])),
+	).sort();
+	const colorOptions = Array.from(
+		new Set(
+			products.flatMap((product) => product.colors.map((color) => color.name)),
+		),
+	).sort();
 
-export default function CollectionPage() {
 	const pathname = usePathname();
 	const router = useRouter();
 	const searchParams = useSearchParams();
@@ -89,7 +92,7 @@ export default function CollectionPage() {
 
 	const filteredProducts = products
 		.filter((product) => {
-			if (selectedCategory && product.category !== selectedCategory) {
+			if (selectedCategory && product.category.name !== selectedCategory) {
 				return false;
 			}
 			if (selectedBrand && product.brand !== selectedBrand) {
@@ -116,7 +119,7 @@ export default function CollectionPage() {
 				return (
 					new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
 				);
-			if (a.bestSeller === b.bestSeller) return b.rating - a.rating;
+			// if (a.bestSeller === b.bestSeller) return b.rating - a.rating;
 			return a.bestSeller ? -1 : 1;
 		});
 
