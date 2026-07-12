@@ -16,6 +16,8 @@ const getProducts = async (): Promise<FullProduct[]> => {
 const FeaturedProducts = async () => {
 	const products = await getProducts();
 
+console.log("Featured products:", products.length);
+
 	return (
 		<section id="featured" className="space-y-10">
 			<div className="flex flex-col gap-3 text-center">
