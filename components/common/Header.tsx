@@ -130,7 +130,7 @@ const Header = () => {
 							<Link href="/auth/signin" className="hidden sm:inline-block">
 								<Button
 									size="sm"
-									className="bg-secondary-foreground hover:bg-secondary-foreground/80 cursor-pointer"
+									className="bg-secondary-foreground dark:bg-secondary dark:hover:bg-secondary/80 hover:bg-secondary-foreground/80 cursor-pointer"
 								>
 									Sign in
 								</Button>

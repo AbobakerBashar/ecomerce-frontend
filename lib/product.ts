@@ -28,3 +28,13 @@ export async function getProducts(params: string = "") {
 	const res = await axios.get(`${API_URL}/products${params}`);
 	return res.data;
 }
+
+export async function getProductBySlug(slug: string) {
+	const res = await axios.get(`${API_URL}/products/${slug}`);
+	return res.data;
+}
+
+export async function getSimilarProducts(catId: string) {
+	const res = await axios.get(`${API_URL}/products/${catId}/similar`);
+	return res.data;
+}

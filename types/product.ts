@@ -101,9 +101,9 @@ export interface FullProduct extends NewArrivalProduct {
 	bestSeller: boolean;
 	newArrival: boolean;
 	// isFeatured: boolean;
-	// gender: string;
+	gender: string;
 	discount: number;
-	// stock: number;
+	stock?: number;
 	colors: {
 		name: string;
 		value: string;
