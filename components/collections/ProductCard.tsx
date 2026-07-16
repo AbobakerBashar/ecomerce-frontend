@@ -37,6 +37,7 @@ function ProductCard({ product }: { product: FullProduct }) {
 						src={imageSrc}
 						alt={product.name}
 						fill
+						sizes="100%"
 						loading="lazy"
 						// unoptimized
 						className="object-cover transition duration-500 ease-out group-hover:scale-105"

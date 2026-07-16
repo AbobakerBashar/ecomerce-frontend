@@ -11,11 +11,11 @@ interface LogoOutBtnProps {
 }
 
 const LogoOutBtn = ({ className, ariaLabel, size }: LogoOutBtnProps) => {
-	const { mutateAsync, isPending: isLoggingOut } = useLogout();
+	const { mutateAsync: logout, isPending: isLoggingOut } = useLogout();
 
 	const handleLogout = async () => {
 		try {
-			await mutateAsync();
+			await logout();
 			toast.success("Logged out successfully");
 		} catch (error) {
 			if (axios.isAxiosError(error)) toast.error(error.response?.data.message);

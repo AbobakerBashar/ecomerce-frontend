@@ -2,12 +2,15 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 const CollectionsHeader = ({
-	categoryTitle,
-	seoDescription,
+	selectedCategory,
 }: {
-	categoryTitle: string;
-	seoDescription: string;
+	selectedCategory: string;
 }) => {
+	const categoryTitle = selectedCategory || "All Collections";
+	const seoDescription = selectedCategory
+		? `Explore the best ${selectedCategory.toLowerCase()} selections with filters for brand, color, and size.`
+		: "Discover curated collections across top categories and brands with fast filtering for color, size, and price.";
+
 	return (
 		<section className="space-y-4">
 			<div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">

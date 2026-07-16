@@ -4,23 +4,21 @@ import { Button } from "../ui/button";
 import ProductCard from "./ProductCard";
 
 interface ProductListProps {
-	filteredProducts: FullProduct[];
+	clearAllFilters: () => void;
+	removeFilter: (key: string, value: string) => void;
+
+	products: FullProduct[];
+	sortOptions: { label: string; value: string }[];
+	selectedColors: string[];
+	selectedSizes: string[];
+
 	selectedCategory: string;
 	selectedBrand: string;
-	selectedColors: string[];
 	selectedSort: string;
-	sortOptions: { label: string; value: string }[];
-	hasMore: boolean;
-	selectedSizes: string[];
-	removeFilter: (key: string, value: string) => void;
-	clearAllFilters: () => void;
-	setVisibleCount: React.Dispatch<React.SetStateAction<number>>;
-	itemsPerPage: number;
-	visibleProducts: FullProduct[];
 }
 
 const ProductsList = ({
-	filteredProducts,
+	products,
 	selectedCategory,
 	selectedBrand,
 	selectedColors,
@@ -29,10 +27,6 @@ const ProductsList = ({
 	selectedSizes,
 	removeFilter,
 	clearAllFilters,
-	hasMore,
-	visibleProducts,
-	setVisibleCount,
-	itemsPerPage,
 }: ProductListProps) => {
 	const activeFilters = [
 		...(selectedCategory
@@ -70,7 +64,7 @@ const ProductsList = ({
 			<div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-border bg-card p-5">
 				<div className="space-y-1">
 					<p className="text-sm font-semibold text-foreground">
-						{filteredProducts.length} products found
+						{products.length} products found
 					</p>
 					<p className="text-sm text-muted-foreground">
 						{selectedCategory ? `${selectedCategory} — ` : "All collections — "}
@@ -112,29 +106,15 @@ const ProductsList = ({
 			) : null}
 
 			<div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-				{visibleProducts.map((product) => (
+				{products.map((product) => (
 					<ProductCard key={product.id} product={product} />
 				))}
 			</div>
 
-			{filteredProducts.length === 0 ? (
+			{products.length === 0 ? (
 				<div className="rounded-3xl border border-border bg-card p-10 text-center text-muted-foreground">
 					No products match these filters. Try removing one filter or clearing
 					all.
-				</div>
-			) : null}
-
-			{hasMore ? (
-				<div className="flex justify-center">
-					<Button
-						variant="default"
-						size="lg"
-						onClick={() =>
-							setVisibleCount((count) => Number(count + itemsPerPage))
-						}
-					>
-						Load more products
-					</Button>
 				</div>
 			) : null}
 		</div>

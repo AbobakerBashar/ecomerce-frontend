@@ -1,33 +1,77 @@
 import CollectionPage from "@/components/collections/CollectionPage";
 import { getProducts } from "@/lib/product";
-import { FullProduct } from "@/types/product";
+import type { FullProduct, Pagination, SearchParams } from "@/types/product";
+import type { Metadata } from "next";
+
 import axios from "axios";
 
-export const metadata = {
+export const metadata: Metadata = {
 	title: "Collections",
 	description: "",
 };
 
-const fetchProducts = async (): Promise<FullProduct[]> => {
+const fetchProducts = async (
+	searchParams: SearchParams,
+): Promise<{
+	pagination: Pagination;
+	products: FullProduct[];
+}> => {
+	const params = new URLSearchParams();
+
+	Object.entries(searchParams).forEach(([key, value]) => {
+		if (!value) return;
+
+		if (Array.isArray(value)) {
+			value.forEach((v) => params.append(key, v));
+		} else {
+			params.append(key, value);
+		}
+	});
+
 	try {
-		const res = await getProducts();
-		if (res.success) return res.products;
-		return [];
+		const res = await getProducts(params.toString());
+		if (res.success)
+			return { products: res.products, pagination: res.pagination };
+		return {
+			pagination: {
+				totalProducts: 0,
+				totalPages: 0,
+				currentPage: 0,
+			},
+			products: [],
+		};
 	} catch (error) {
 		console.log(error);
 
 		if (axios.isAxiosError(error)) {
 			console.log(error.response?.data);
 		}
-		return [];
+		return {
+			pagination: {
+				totalProducts: 0,
+				totalPages: 0,
+				currentPage: 0,
+			},
+			products: [],
+		};
 	}
 };
 
-export default async function CollectionsRoute() {
-	const products = await fetchProducts();
+type Props = {
+	searchParams: Promise<SearchParams>;
+};
 
-	const c = products.map((p) => p.category);
-	console.log(c);
+export default async function CollectionsRoute({ searchParams }: Props) {
+	const { category, brand, sort, page, size, color } = await searchParams;
 
-	return <CollectionPage products={products} />;
+	const { products, pagination } = await fetchProducts({
+		category,
+		brand,
+		sort,
+		page,
+		size,
+		color,
+	});
+
+	return <CollectionPage products={products} pagination={pagination} />;
 }

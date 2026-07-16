@@ -22,7 +22,7 @@ export default function HeroSection() {
 				className="absolute inset-0"
 			>
 				<Image
-					src="/images/hero-3.jpg"
+					src="/images/hero-3.webp"
 					alt="Stylish lifestyle essentials background"
 					fill
 					className="object-cover"

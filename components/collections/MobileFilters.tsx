@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/sheet";
 import { products } from "@/lib/data";
 import { Filter, X } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface MobileFiltersProps {
 	updateQuery: (key: string, values: string | string[] | null) => void;
@@ -21,6 +20,12 @@ interface MobileFiltersProps {
 	colorOptions: string[];
 	sizeOptions: string[];
 	sortOptions: { label: string; value: string }[];
+	selectedCategory: string;
+	selectedBrand: string;
+	selectedColors: string[];
+	selectedSizes: string[];
+	selectedSort: string;
+	clearAllFilters: () => void;
 }
 
 const MobileFilters = ({
@@ -31,21 +36,13 @@ const MobileFilters = ({
 	toggleParam,
 	sizeOptions,
 	sortOptions,
+	selectedCategory,
+	selectedBrand,
+	selectedColors,
+	selectedSizes,
+	selectedSort,
+	clearAllFilters,
 }: MobileFiltersProps) => {
-	const searchParams = useSearchParams();
-	const pathname = usePathname();
-	const router = useRouter();
-
-	const selectedCategory = searchParams.get("category") ?? "";
-	const selectedBrand = searchParams.get("brand") ?? "";
-	const selectedColors = searchParams.getAll("color");
-	const selectedSizes = searchParams.getAll("size");
-	const selectedSort = searchParams.get("sort") ?? "featured";
-
-	const clearAllFilters = () => {
-		router.replace(pathname, { scroll: false });
-	};
-
 	return (
 		<div className="flex flex-col gap-4 rounded-3xl border border-border bg-card p-5 shadow-sm lg:hidden">
 			<div className="flex items-center justify-between gap-3">

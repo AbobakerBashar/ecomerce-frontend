@@ -1,6 +1,5 @@
 import { products } from "@/lib/data";
 import { Button } from "../ui/button";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface CollectionsSidebarProps {
 	categoryOptions: string[];
@@ -8,8 +7,14 @@ interface CollectionsSidebarProps {
 	colorOptions: string[];
 	updateQuery: (key: string, values: string | string[] | null) => void;
 	toggleParam: (key: string, value: string) => void;
+	clearAllFilters: () => void;
 	sizeOptions: string[];
 	sortOptions: { label: string; value: string }[];
+	selectedBrand: string;
+	selectedColors: string[];
+	selectedCategory: string;
+	selectedSizes: string[];
+	selectedSort: string;
 }
 
 const CollectionsSidebar = ({
@@ -20,21 +25,13 @@ const CollectionsSidebar = ({
 	colorOptions,
 	sizeOptions,
 	sortOptions,
+	selectedBrand,
+	selectedColors,
+	selectedCategory,
+	selectedSizes,
+	selectedSort,
+	clearAllFilters,
 }: CollectionsSidebarProps) => {
-	const searchParams = useSearchParams();
-	const router = useRouter();
-	const pathname = usePathname();
-
-	const selectedBrand = searchParams.get("brand") ?? "";
-	const selectedColors = searchParams.getAll("color");
-	const selectedCategory = searchParams.get("category") ?? "";
-	const selectedSizes = searchParams.getAll("size");
-	const selectedSort = searchParams.get("sort") ?? "featured";
-
-	const clearAllFilters = () => {
-		router.replace(pathname, { scroll: false });
-	};
-
 	return (
 		<aside className="hidden lg:block">
 			<div className="sticky top-28 space-y-6 rounded-3xl border border-border bg-card p-6">

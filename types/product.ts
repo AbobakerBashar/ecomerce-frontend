@@ -112,4 +112,17 @@ export interface FullProduct extends NewArrivalProduct {
 	createdAt: string;
 }
 
-// name brand slug description bestSeller images price salePrice discount colors sizes
+export type SearchParams = {
+	category?: string;
+	brand?: string;
+	sort?: string;
+	page?: string;
+	size?: string[] | string;
+	color?: string[] | string;
+};
+
+export type Pagination = {
+	totalProducts: number;
+	totalPages: number;
+	currentPage: number;
+};

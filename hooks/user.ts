@@ -54,7 +54,7 @@ export const useLogout = () => {
 			);
 			return res.data;
 		},
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ["user"] }),
+		onSuccess: () => queryClient.setQueryData(["user"], null),
 	});
 };
 

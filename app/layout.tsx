@@ -27,7 +27,6 @@ export default function RootLayout({
 		>
 			<body>
 				<Suspense>
-					{" "}
 					<Providers>{children}</Providers>
 				</Suspense>
 			</body>

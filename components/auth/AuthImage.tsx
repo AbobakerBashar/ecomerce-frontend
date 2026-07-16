@@ -4,7 +4,7 @@ const AuthImage = () => {
 	return (
 		<div className="h-screen hidden md:block">
 			<Image
-				src="/images/hero-3.jpg"
+				src="/images/hero-3.webp"
 				width={1920}
 				height={1080}
 				sizes="fill"
