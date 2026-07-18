@@ -46,15 +46,24 @@ const routes = [
 		route: "/dashboard",
 		icon: <ClipboardList className="w-4 h-4" />,
 	},
+	{
+		label: "Cart",
+		route: "/cart",
+		icon: <ShoppingBag className="w-4 h-4" />,
+	},
 ];
 
 const isActive = (pathname: string, route: string) => route === pathname;
 
 interface MobileNavProps {
 	isAuthenticated: boolean;
+	cartCount: number;
 }
 
-export default function MobileNav({ isAuthenticated }: MobileNavProps) {
+export default function MobileNav({
+	isAuthenticated,
+	cartCount,
+}: MobileNavProps) {
 	const pathname = usePathname();
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -70,18 +79,38 @@ export default function MobileNav({ isAuthenticated }: MobileNavProps) {
 						const Icon = route.icon;
 						return (
 							<SheetClose key={route.label}>
-								<Link
-									href={route.route}
-									className={`px-4 py-2 w-full text-sm font-medium rounded-md transition-colors inline-flex items-center gap-2 ${
-										isActive(pathname, route.route)
-											? "bg-primary text-primary-foreground"
-											: "text-text-mid hover:bg-secondary hover:text-primary"
-									}`}
-									onClick={() => setIsOpen(false)}
-								>
-									{Icon && Icon}
-									<span>{route.label}</span>
-								</Link>
+								{route.route === "/cart" ? (
+									isAuthenticated && (
+										<Link
+											href={route.route}
+											className={`px-4 py-2 w-full text-sm font-medium rounded-md transition-colors inline-flex items-center gap-2 relative ${
+												isActive(pathname, route.route)
+													? "bg-primary text-primary-foreground"
+													: "text-text-mid hover:bg-secondary hover:text-primary"
+											}`}
+											onClick={() => setIsOpen(false)}
+										>
+											<span className="text-primary absolute -top-3.5 left-6 px-2 py-1 bg-secondary rounded-full shadow-md font-semibold text-xs">
+												{cartCount}
+											</span>
+											{Icon && Icon}
+											<span>{route.label}</span>
+										</Link>
+									)
+								) : (
+									<Link
+										href={route.route}
+										className={`px-4 py-2 w-full text-sm font-medium rounded-md transition-colors inline-flex items-center gap-2 ${
+											isActive(pathname, route.route)
+												? "bg-primary text-primary-foreground"
+												: "text-text-mid hover:bg-secondary hover:text-primary"
+										}`}
+										onClick={() => setIsOpen(false)}
+									>
+										{Icon && Icon}
+										<span>{route.label}</span>
+									</Link>
+								)}
 							</SheetClose>
 						);
 					})}

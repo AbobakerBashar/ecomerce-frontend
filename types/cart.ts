@@ -1,4 +1,29 @@
+export type CartItemInput = {
+	productId: string;
+	variants?: {
+		color?: string;
+		size?: string;
+	};
+	quantity: number;
+};
+
 export type CartItem = {
 	id: string;
-	qty: number;
+	name: string;
+	description: string;
+	brand?: string;
+	images: string[];
+	price: number;
+	salePrice?: number;
+	color?: string;
+	size?: string;
+	quantity: number;
+};
+
+export type CartResponse = {
+	success: boolean;
+	cart: {
+		id: string;
+		items: CartItem[];
+	};
 };

@@ -1,5 +1,12 @@
 import CartContent from "@/components/cart/CartContent";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Cart",
+	description: "Review items, adjust quantities, and proceed to checkout.",
+};
+
 export default function CartPage() {
 	return (
 		<div className="mx-auto max-w-6xl space-y-8 py-6">

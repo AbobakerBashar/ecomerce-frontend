@@ -13,6 +13,7 @@ import LogoOutBtn from "./LogoOutBtn";
 import MobileNav from "./MobileNav";
 import dynamic from "next/dynamic";
 import { useGetUser } from "@/hooks/user";
+import { useGetCartItemCount } from "@/hooks/cart";
 
 const ThemeToggle = dynamic(() => import("./ThemeToggle"), {
 	ssr: false,
@@ -31,7 +32,10 @@ const routes = [
 const Header = () => {
 	const pathname = usePathname();
 
+	const { data: count } = useGetCartItemCount();
 	const { data: user, isLoading } = useGetUser();
+
+	const cartCount = count ?? 0;
 
 	const isAuthenticated = !isLoading && !!user;
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -109,12 +113,15 @@ const Header = () => {
 								className={`hidden sm:inline-flex relative items-center justify-center border border-border bg-secondary p-2 text-muted-foreground transition w-8.5 h-8.5 rounded-full hover:text-primary hover:border-primary ${isActive(pathname, "/cart") ? "text-primary border-primary" : "text-text-mid"}`}
 							>
 								<ShoppingBag className="h-4 w-4" />
-								<span className="text-primary text-sm absolute -top-5 right-0 px-1.5 py-0.5 bg-secondary rounded-full shadow-md font-semibold">
-									0
+								<span className="text-primary absolute -top-5 right-0 px-2 py-1 bg-secondary rounded-full shadow-md font-semibold text-xs">
+									{cartCount}
 								</span>
 							</Link>
 							<LogoOutBtn className="hidden sm:flex h-8.5 w-8.5 rounded-full items-center justify-center" />
-							<MobileNav isAuthenticated={isAuthenticated} />
+							<MobileNav
+								isAuthenticated={isAuthenticated}
+								cartCount={cartCount}
+							/>
 						</div>
 					) : (
 						<div className="flex items-center gap-3">
@@ -140,7 +147,10 @@ const Header = () => {
 									Sign up
 								</Button>
 							</Link>
-							<MobileNav isAuthenticated={isAuthenticated} />
+							<MobileNav
+								isAuthenticated={isAuthenticated}
+								cartCount={cartCount}
+							/>
 						</div>
 					)}
 				</div>

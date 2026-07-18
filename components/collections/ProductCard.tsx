@@ -7,11 +7,15 @@ import { useState } from "react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Star } from "lucide-react";
+import AddToCartBtn from "../common/AddToCartBtn";
 
 function ProductCard({ product }: { product: FullProduct }) {
 	const [selectedColor, setSelectedColor] = useState(
 		product.colors[0]?.name ?? "",
 	);
+
+	const [selectedSize, setSelectedSize] = useState("");
+
 	const [isHovered, setIsHovered] = useState(false);
 	const [quickAddOpen, setQuickAddOpen] = useState(false);
 
@@ -95,10 +99,10 @@ function ProductCard({ product }: { product: FullProduct }) {
 									key={color.name}
 									type="button"
 									onClick={() => setSelectedColor(color.name)}
-									className={`relative h-8 w-8 rounded-full border transition-all focus:outline-none ${selectedColor === color.name ? "border-primary ring-2 ring-primary/20" : "border-border"}`}
-									aria-label={color.name}
-									style={{ backgroundColor: color.value }}
-								/>
+									className={`rounded-full border border-border bg-transparent px-2 py-1.5 text-xs text-foreground transition hover:bg-muted cursor-pointer ${selectedColor === color.name ? "border-primary" : ""}`}
+								>
+									{color.name}
+								</button>
 							))}
 						</div>
 					</div>
@@ -108,7 +112,7 @@ function ProductCard({ product }: { product: FullProduct }) {
 					<Button
 						variant="outline"
 						size="sm"
-						className="w-full"
+						className="w-full cursor-pointer"
 						onClick={() => setQuickAddOpen((value) => !value)}
 					>
 						{quickAddOpen ? "Hide quick add" : "Quick add"}
@@ -122,15 +126,24 @@ function ProductCard({ product }: { product: FullProduct }) {
 									<button
 										key={size}
 										type="button"
-										className="rounded-full border border-border bg-transparent px-3 py-2 text-sm text-foreground transition hover:bg-muted"
+										onClick={() => setSelectedSize(size)}
+										className={`rounded-full border border-border bg-transparent px-2 py-1.5 text-xs text-foreground transition hover:bg-muted cursor-pointer ${
+											selectedSize === size ? "border-primary" : ""
+										}`}
 									>
 										{size}
 									</button>
 								))}
 							</div>
-							<Button variant="default" size="sm" className="mt-4 w-full">
-								Add to cart
-							</Button>
+							<AddToCartBtn
+								className="mt-4 w-full"
+								productId={product.id}
+								variants={{
+									color: selectedColor,
+									size: selectedSize,
+								}}
+								quantity={1}
+							/>
 						</div>
 					) : null}
 				</div>
