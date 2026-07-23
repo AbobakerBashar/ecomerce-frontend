@@ -12,7 +12,7 @@ export const useGetCart = () => {
 			const res = await axios.get(`${API_URL}/cart`, {
 				withCredentials: true,
 			});
-			return res.data;
+			return res.data?.cart;
 		},
 	});
 };

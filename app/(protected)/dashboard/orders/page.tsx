@@ -1,34 +1,30 @@
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { getAllOrders } from "@/lib/order";
+import type { OrdersResponse } from "@/types/order";
+import OrdersContent from "@/components/dashboard/OrdersContent";
 
-export default function OrdersPage() {
-	return (
-		<div className="space-y-4">
-			<Card className="p-4">
-				<h2 className="text-lg font-semibold">Orders</h2>
-				<p className="mt-1 text-sm text-muted-foreground">
-					Track your purchase history.
-				</p>
-			</Card>
+const fetchOrders = async (status: string, q: string) => {
+	const params = new URLSearchParams();
 
-			<div className="grid gap-4 md:grid-cols-2">
-				<Card className="p-4">
-					<p className="text-sm font-medium">Order #1042</p>
-					<p className="mt-1 text-xs text-muted-foreground">Processing</p>
-					<div className="mt-3 flex items-center gap-2">
-						<Badge>Processing</Badge>
-						<Badge variant="outline">ETA 3-5 days</Badge>
-					</div>
-				</Card>
-				<Card className="p-4">
-					<p className="text-sm font-medium">Order #1029</p>
-					<p className="mt-1 text-xs text-muted-foreground">Delivered</p>
-					<div className="mt-3 flex items-center gap-2">
-						<Badge variant="secondary">Delivered</Badge>
-						<Badge variant="outline">Completed</Badge>
-					</div>
-				</Card>
-			</div>
-		</div>
-	);
+	if (status) params.set("status", status);
+	if (q) params.set("q", q);
+
+	try {
+		const res: OrdersResponse = await getAllOrders(params.toString());
+		if (res.success) return res.orders;
+		return [];
+	} catch (error) {
+		console.error("Failed to fetch orders:", error);
+		return [];
+	}
+};
+
+type Props = {
+	searchParams: Promise<{ status: string; q: string }>;
+};
+
+export default async function OrdersPage({ searchParams }: Props) {
+	const { status, q } = await searchParams;
+	const orders = await fetchOrders(status, q);
+
+	return <OrdersContent orders={orders} />;
 }

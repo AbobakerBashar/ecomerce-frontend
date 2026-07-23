@@ -4,19 +4,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useCheckout } from "@/hooks/checkout";
 import { Address } from "@/types/user";
+import axios from "axios";
+import { Loader } from "lucide-react";
+import { useState } from "react";
 
 const CheckoutForm = () => {
-	const [paymentMethod, setPaymentMethod] = useState<"card" | "cod">("card");
-	const [loading, setLoading] = useState(false);
+	const { mutateAsync: checkout, isPending: isProcessing } = useCheckout();
+
 	const [error, setError] = useState<string | null>(null);
 	const [address, setAddress] = useState<Address>({
 		fullName: "",
 		email: "",
 		phone: "",
-		address1: "",
-		address2: "",
+		address: "",
 		city: "",
 		state: "",
 		zip: "",
@@ -31,7 +33,7 @@ const CheckoutForm = () => {
 		if (!address.fullName) return "Full name is required.";
 		if (!address.email) return "Email is required.";
 		if (!address.phone) return "Phone number is required.";
-		if (!address.address1) return "Address is required.";
+		if (!address.address) return "Address is required.";
 		if (!address.city) return "City is required.";
 		if (!address.state) return "State is required.";
 		if (!address.zip) return "ZIP / Postal code is required.";
@@ -39,19 +41,26 @@ const CheckoutForm = () => {
 	}
 
 	async function onConfirm() {
+		if (isProcessing) return;
 		setError(null);
 		const v = validate();
 		if (v) {
 			setError(v);
 			return;
 		}
-		setLoading(true);
-		// Placeholder for Stripe/Razorpay integration.
-		await new Promise((r) => setTimeout(r, 800));
-		setLoading(false);
-		setError(
-			"Checkout UI submitted (demo). Integrate Stripe/Razorpay to charge the order.",
-		);
+		try {
+			const res = await checkout(address);
+			if (res.success) {
+				window.location.href = res.url;
+			}
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				return setError(
+					error.response?.data?.message || "Something went wrong",
+				);
+			}
+			setError("Faild");
+		}
 	}
 
 	return (
@@ -60,7 +69,7 @@ const CheckoutForm = () => {
 				<h2 className="text-base font-semibold text-foreground">
 					Shipping details
 				</h2>
-				<Separator className="my-4" />
+				<Separator className="my-2.5" />
 
 				<div className="grid gap-4 sm:grid-cols-2">
 					<div className="sm:col-span-2 space-y-2">
@@ -99,19 +108,9 @@ const CheckoutForm = () => {
 						<Label htmlFor="address1">Address</Label>
 						<Input
 							id="address1"
-							value={address.address1}
-							onChange={(e) => update("address1", e.target.value)}
+							value={address.address}
+							onChange={(e) => update("address", e.target.value)}
 							placeholder="Street address"
-						/>
-					</div>
-
-					<div className="sm:col-span-2 space-y-2">
-						<Label htmlFor="address2">Apt / Suite (optional)</Label>
-						<Input
-							id="address2"
-							value={address.address2}
-							onChange={(e) => update("address2", e.target.value)}
-							placeholder="Apt 4B"
 						/>
 					</div>
 
@@ -159,39 +158,14 @@ const CheckoutForm = () => {
 
 			<Card className="p-5">
 				<h2 className="text-base font-semibold text-foreground">Payment</h2>
-				<Separator className="my-4" />
+				<Separator className="my-2" />
 
 				<div className="space-y-3">
-					<div className="flex gap-3">
-						<Button
-							onClick={() => setPaymentMethod("card")}
-							variant={paymentMethod === "card" ? "default" : "outline"}
-							type="button"
-							className="flex-1"
-						>
-							Pay with Card
-						</Button>
-						<Button
-							onClick={() => setPaymentMethod("cod")}
-							variant={paymentMethod === "cod" ? "default" : "outline"}
-							type="button"
-							className="flex-1"
-						>
-							Cash on Delivery
-						</Button>
-					</div>
+					<p className="rounded-lg border border-border bg-muted/30 p-4 text-sm text-muted-foreground">
+						Stripe/Razorpay card fields will be mounted here later.
+					</p>
 
-					{paymentMethod === "card" ? (
-						<div className="rounded-lg border border-border bg-muted/30 p-4 text-sm text-muted-foreground">
-							Stripe/Razorpay card fields will be mounted here later.
-						</div>
-					) : (
-						<div className="rounded-lg border border-border bg-muted/30 p-4 text-sm text-muted-foreground">
-							You will pay upon delivery. (Demo UI)
-						</div>
-					)}
-
-					<div>
+					<div className="space-y-2">
 						<Label htmlFor="note">Order note (optional)</Label>
 						<Textarea
 							id="note"
@@ -204,12 +178,19 @@ const CheckoutForm = () => {
 
 			{error ? <p className="text-sm text-destructive">{error}</p> : null}
 			<Button
-				className="w-full"
+				className={`w-full ${isProcessing ? "cursor-not-allowed" : "cursor-pointer"}`}
 				onClick={onConfirm}
-				disabled={loading}
+				disabled={isProcessing}
 				type="button"
 			>
-				{loading ? "Processing…" : "Confirm order"}
+				{isProcessing ? (
+					<>
+						<Loader className="w-4 h-4 animate-spin" />
+						Processing...
+					</>
+				) : (
+					"Confirm order"
+				)}
 			</Button>
 		</div>
 	);

@@ -1,13 +1,9 @@
-import { products } from "@/lib/data";
+import { CartItem } from "@/types/cart";
 import { Card } from "../ui/card";
 import { Separator } from "../ui/separator";
 
 interface SummaryProps {
-	lineItems: {
-		product: (typeof products)[number];
-		qty: number;
-		subtotal: number;
-	}[];
+	items: CartItem[];
 	totals: {
 		subtotal: number;
 		shipping: number;
@@ -16,7 +12,7 @@ interface SummaryProps {
 	};
 }
 
-const Summary = ({ lineItems, totals }: SummaryProps) => {
+const Summary = ({ items, totals }: SummaryProps) => {
 	return (
 		<div className="space-y-4">
 			<Card className="p-5">
@@ -26,15 +22,17 @@ const Summary = ({ lineItems, totals }: SummaryProps) => {
 				<Separator className="my-4" />
 
 				<div className="space-y-3 text-sm">
-					{lineItems.map((li) => (
+					{items.map((item) => (
 						<div
-							key={li.product.id}
+							key={item.id}
 							className="flex items-center justify-between gap-3"
 						>
 							<span className="text-muted-foreground">
-								{li.product.name} × {li.qty}
+								{item.name} × {item.quantity}
 							</span>
-							<span className="font-medium">${li.subtotal.toFixed(2)}</span>
+							<span className="font-medium">
+								${(item.price * item.quantity).toFixed(2)}
+							</span>
 						</div>
 					))}
 				</div>

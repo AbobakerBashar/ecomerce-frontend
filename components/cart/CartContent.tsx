@@ -8,69 +8,41 @@ import { Spinner } from "../ui/spinner";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
-
-// function safeParseCartItems(raw: string | null): CartItem[] {
-// 	console.log("ROW", raw);
-// 	if (!raw) return [];
-// 	try {
-// 		const parsed = JSON.parse(raw) as CartItem[];
-// 		if (!Array.isArray(parsed)) return [];
-// 		return parsed
-// 			.filter((x) => x && typeof x.id === "string" && typeof x.qty === "number")
-// 			.map((x) => ({
-// 				id: x.id,
-// 				qty: Math.max(1, Math.floor(x.qty)),
-// 			}));
-// 	} catch {
-// 		return [];
-// 	}
-// }
+import { useMemo } from "react";
 
 const CartContent = () => {
 	const { data: cart, isLoading } = useGetCart();
-	const items = cart?.cart.items ?? [];
-	// const [items, setItems] = useState(() => {
-	// 	if (typeof window === "undefined") return [];
+	const items = cart?.items ?? [];
 
-	// 	return safeParseCartItems(window.localStorage.getItem(STORAGE_KEY));
-	// });
-	// localStorage.setItem(
-	// 	STORAGE_KEY,
-	// 	JSON.stringify(
-	// 		products.map((p) => ({
-	// 			id: p.id,
-	// 			qty: 1,
-	// 		})),
-	// 	),
-	// );
+	const totals = useMemo(() => {
+		const subtotal = (cart?.items || []).reduce(
+			(acc, li) => acc + li.price * li.quantity,
+			0,
+		);
+		const shipping = subtotal > 50 || subtotal === 0 ? 0 : 7.99;
+		const tax = subtotal * 0.07;
+		const total = subtotal + shipping + tax;
+		return { subtotal, shipping, tax, total };
+	}, [cart]);
 
-	// const productById = useMemo(() => {
-	// 	const map = new Map<string, (typeof products)[number]>();
-	// 	for (const p of products) map.set(p.id, p);
-	// 	return map;
-	// }, []);
-
-	// const totals = useMemo(() => {
-	// 	const subtotal = items.reduce((acc, li) => acc + li.subtotal, 0);
-	// 	const shipping = subtotal > 50 || subtotal === 0 ? 0 : 7.99;
-	// 	const tax = subtotal * 0.07;
-	// 	const total = subtotal + shipping + tax;
-	// 	return { subtotal, shipping, tax, total };
-	// }, [items]);
-
-	if (isLoading) return <Spinner label="Loading cart..." size="2xl" />;
+	if (isLoading)
+		return <Spinner label="Loading cart..." size="2xl" variant="gradient" />;
 
 	return (
 		<>
 			{items.length === 0 ? (
 				<Card className="p-8 text-center w-full max-w-md mx-auto">
 					<p className="text-muted-foreground">Your cart is empty.</p>
-					<Button variant="default" size="lg">
-						<Link href="/collections" className="flex items-center gap-2">
-							Collections
+					<Link href="/collections" className="flex items-center gap-1.5">
+						<Button
+							variant="default"
+							size="lg"
+							className="w-full cursor-pointer"
+						>
 							<ShoppingBag className="w-4 h-4" />
-						</Link>
-					</Button>{" "}
+							View Collections
+						</Button>
+					</Link>
 				</Card>
 			) : (
 				<div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
@@ -80,10 +52,10 @@ const CartContent = () => {
 					{/* Right: summary */}
 					<Summary
 						totals={{
-							subtotal: 0,
-							shipping: 0,
-							tax: 0,
-							total: 0,
+							subtotal: totals.subtotal,
+							shipping: totals.shipping,
+							tax: totals.tax,
+							total: totals.total,
 						}}
 					/>
 				</div>

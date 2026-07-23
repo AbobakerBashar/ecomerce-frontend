@@ -21,9 +21,6 @@ export type CartItem = {
 };
 
 export type CartResponse = {
-	success: boolean;
-	cart: {
-		id: string;
-		items: CartItem[];
-	};
+	id: string;
+	items: CartItem[];
 };

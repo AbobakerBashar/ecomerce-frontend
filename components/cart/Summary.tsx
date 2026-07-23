@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
 const Summary = ({
 	totals,
@@ -52,7 +53,9 @@ const Summary = ({
 						</label>
 						<Input placeholder="Enter code" />
 					</div>
-					<Button className="w-full">Apply</Button>
+					<Link href="/checkout">
+						<Button className="w-full cursor-pointer">Apply</Button>
+					</Link>
 				</div>
 			</Card>
 		</div>

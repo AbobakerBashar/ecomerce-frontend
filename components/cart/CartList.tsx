@@ -10,6 +10,7 @@ import axios from "axios";
 import { Loader, Minus, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface CartListProps {
 	items: CartItem[];
@@ -195,9 +196,9 @@ export default function CartList({ items }: CartListProps) {
 									<p className="text-sm text-muted-foreground">
 										${(li.salePrice || li.price).toFixed(2)} each
 									</p>
-									{/* <p className="text-lg font-semibold text-foreground">
-										${li.subtotal.toFixed(2)}
-									</p> */}
+									<p className="text-lg font-semibold text-foreground">
+										${(li.price * li.quantity).toFixed(2)}
+									</p>
 								</div>
 							</div>
 						</div>
@@ -221,7 +222,9 @@ export default function CartList({ items }: CartListProps) {
 						"Clear cart"
 					)}
 				</Button>
-				<Button className="cursor-pointer">Proceed to checkout</Button>
+				<Link href="/checkout">
+					<Button className="cursor-pointer">Proceed to checkout</Button>
+				</Link>
 			</div>
 		</div>
 	);
