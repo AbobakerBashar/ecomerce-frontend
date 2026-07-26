@@ -1,11 +1,11 @@
 import { SpinnerContainer } from "@/components/ui/spinner";
 
-export default function CollectionsLoading() {
+export default function PublicLoading() {
 	return (
 		<SpinnerContainer
 			isLoading
 			size="2xl"
-			label="Loading collections..."
+			label="Loading page..."
 			variant="gradient"
 		/>
 	);

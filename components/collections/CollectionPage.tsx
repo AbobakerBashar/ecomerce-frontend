@@ -156,7 +156,9 @@ export default function CollectionPage({ products, pagination }: Props) {
 						removeFilter={removeFilter}
 						clearAllFilters={clearAllFilters}
 					/>
-					<Pagination pagination={pagination} updateQuery={updateQuery} />
+					{pagination.totalPages > 1 && (
+						<Pagination pagination={pagination} updateQuery={updateQuery} />
+					)}
 				</div>
 			</section>
 		</div>

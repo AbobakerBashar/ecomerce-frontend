@@ -13,6 +13,7 @@ const fetchOrder = async (
 ): Promise<OrderResponse | null> => {
 	try {
 		const res = await getOrder(session_id);
+		if (!session_id) notFound();
 		return res;
 	} catch (error) {
 		console.log(error);

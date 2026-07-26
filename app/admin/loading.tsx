@@ -1,12 +1,12 @@
 import { SpinnerContainer } from "@/components/ui/spinner";
 
-export default function CollectionsLoading() {
+export default function AdminLoading() {
 	return (
 		<SpinnerContainer
 			isLoading
-			size="2xl"
-			label="Loading collections..."
-			variant="gradient"
+			size="lg"
+			label="Loading admin dashboard..."
+			variant="default"
 		/>
 	);
 }
