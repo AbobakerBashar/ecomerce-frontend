@@ -1,6 +1,6 @@
 import CheckoutSuccess from "@/components/checkout/CheckoutSuccess";
-import { getOrder } from "@/lib/order";
-import { OrderResponse } from "@/types/order";
+import { getOrder } from "@/lib/order"; // assuming this is where you put the server action
+import type { OrderResponse } from "@/types/order";
 import axios from "axios";
 import { notFound } from "next/navigation";
 
@@ -9,22 +9,43 @@ export const metadata = {
 	description: "Your order has been placed successfully.",
 };
 
+const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
 const fetchOrder = async (
 	session_id: string,
 ): Promise<OrderResponse | null> => {
-	try {
-		const res = await getOrder(session_id);
-		if (!session_id) notFound();
-		return res;
-	} catch (error) {
-		if (axios.isAxiosError(error)) {
-			throw new Error(error.response?.data?.message || "Faild to load order.");
-		} else {
-			console.log(error);
-		}
+	if (!session_id) notFound();
 
-		throw error;
+	let attempts = 0;
+	const maxAttempts = 5;
+
+	while (attempts < maxAttempts) {
+		try {
+			const res = await getOrder(session_id);
+			return res;
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				if (error.response?.status === 404) {
+					attempts++;
+					if (attempts >= maxAttempts) {
+						notFound();
+					}
+					await delay(2000);
+					continue;
+				}
+
+				console.log("Response:", error.response?.data);
+				throw new Error(
+					error.response?.data?.message || "Failed to load order.",
+				);
+			} else {
+				console.log(error);
+				throw error;
+			}
+		}
 	}
+
+	return null;
 };
 
 export default async function CheckoutSuccessPage({
@@ -37,7 +58,7 @@ export default async function CheckoutSuccessPage({
 	const orderData = await fetchOrder(session_id);
 	if (!orderData || !orderData.order) return notFound();
 
-	const order = orderData?.order;
+	const order = orderData.order;
 
 	return (
 		<div className="mx-auto max-w-3xl space-y-8 py-6">
