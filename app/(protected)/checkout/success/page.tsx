@@ -34,12 +34,10 @@ const fetchOrder = async (
 					continue;
 				}
 
-				console.log("Response:", error.response?.data);
 				throw new Error(
 					error.response?.data?.message || "Failed to load order.",
 				);
 			} else {
-				console.log(error);
 				throw error;
 			}
 		}
@@ -53,9 +51,7 @@ export default async function CheckoutSuccessPage({
 }: {
 	searchParams: Promise<{ session_id: string }>;
 }) {
-	const { session_id } = await searchParams;
-
-	const orderData = await fetchOrder(session_id);
+	const orderData = await fetchOrder((await searchParams).session_id);
 	if (!orderData || !orderData.order) return notFound();
 
 	const order = orderData.order;

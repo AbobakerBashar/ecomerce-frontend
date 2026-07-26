@@ -10,7 +10,7 @@ export default function GlobalNotFound() {
 					<span className="text-4xl font-bold text-muted-foreground">404</span>
 				</div>
 				<h1 className="text-2xl font-semibold tracking-tight">
-					Page not found
+					Order not found
 				</h1>
 				<p className="mt-2 text-sm text-muted-foreground">
 					The order you&apos;re looking for doesn&apos;t exist or does not

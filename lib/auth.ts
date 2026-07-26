@@ -56,7 +56,6 @@ export async function getUserAction() {
 	const token = cookieStore.get("jwt")?.value;
 
 	if (!token) throw new Error("Not authenticated");
-
 	const res = await axios.get(`${baseEndpoint}/users/me`, {
 		headers: {
 			Cookie: `jwt=${token}`,
