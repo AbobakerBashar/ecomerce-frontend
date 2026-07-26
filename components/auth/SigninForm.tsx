@@ -16,41 +16,38 @@ const SigninForm = () => {
 	const router = useRouter();
 	const redirect = searchParams.get("redirect") || "/";
 
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
 	const [error, setError] = useState<Record<string, string> | null>(null);
 
 	const { mutateAsync: signin, isPending: isLoggingIn } = useSignin();
 
-	async function onSubmit(e: React.FormEvent) {
-		e.preventDefault();
+	const onSubmit = async (data: FormData): Promise<void> => {
 		setError(null);
 
 		if (isLoggingIn) return;
 
-		if (!email || !password)
-			return toast.error("Please enter email and password.");
+		if (!data.get("email") || !data.get("password")) {
+			toast.error("Please enter email and password.");
+			return;
+		}
 
 		try {
-			const res = await signin({
-				email,
-				password,
-			});
+			const res = await signin(data);
 			if (res.success) {
 				toast.success(`Welcome back ${res.user?.name}!`);
 				router.replace(redirect);
 			}
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
+				console.log(error.response?.data.errors);
 				setError(error.response?.data.errors ?? {});
 			} else if (error instanceof Error)
 				setError({ internalErr: error.message });
 			else setError({ internalErr: "Unknown error" });
 		}
-	}
+	};
 
 	return (
-		<form className="mt-6 space-y-4" onSubmit={onSubmit}>
+		<form className="mt-6 space-y-4" action={onSubmit}>
 			<div className="space-y-2">
 				<Label className="text-sm font-medium" htmlFor="email">
 					Email
@@ -59,8 +56,7 @@ const SigninForm = () => {
 					id="email"
 					type="email"
 					placeholder="you@example.com"
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
+					name="email"
 					required
 				/>
 				{error?.email && (
@@ -76,8 +72,7 @@ const SigninForm = () => {
 					id="password"
 					type="password"
 					placeholder="••••••••"
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
+					name="password"
 					required
 				/>
 				{error?.password && (

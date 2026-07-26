@@ -1,25 +1,17 @@
-import {
-	LoginInput,
-	LogoutResponse,
-	RegisterInput,
-	UserResponse,
-} from "@/types/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-
-const baseEndpoint = process.env.NEXT_PUBLIC_BASE_ENDPOINT || "";
+import {
+	loginAction,
+	registerAction,
+	logoutAction,
+	getUserAction,
+} from "@/lib/auth";
 
 export const useSignup = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<UserResponse, Error, RegisterInput>({
+	return useMutation({
 		mutationKey: ["register"],
-		mutationFn: async (data: RegisterInput) => {
-			const res = await axios.post(`${baseEndpoint}/users/register`, data, {
-				withCredentials: true,
-			});
-			return res.data;
-		},
+		mutationFn: async (data: FormData) => await registerAction(data),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["user"] });
 		},
@@ -27,48 +19,33 @@ export const useSignup = () => {
 };
 
 export const useGetUser = () => {
-	return useQuery<UserResponse, Error>({
+	return useQuery({
 		queryKey: ["user"],
-
-		queryFn: async () => {
-			const res = await axios.get(`${baseEndpoint}/users/me`, {
-				withCredentials: true,
-			});
-			return res.data;
-		},
+		queryFn: async () => await getUserAction(),
+		retry: false,
 	});
 };
 
 export const useLogout = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<LogoutResponse, Error>({
+	return useMutation({
 		mutationKey: ["logout"],
 		mutationFn: async () => {
-			const res = await axios.post(
-				`${baseEndpoint}/users/logout`,
-				{},
-				{
-					withCredentials: true,
-				},
-			);
-			return res.data;
+			return await logoutAction();
 		},
-		onSuccess: () => queryClient.setQueryData(["user"], null),
+		onSuccess: () => {
+			queryClient.setQueryData(["user"], null);
+		},
 	});
 };
 
 export const useSignin = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<UserResponse, Error, LoginInput>({
+	return useMutation({
 		mutationKey: ["login"],
-		mutationFn: async (data: LoginInput) => {
-			const res = await axios.post(`${baseEndpoint}/users/login`, data, {
-				withCredentials: true,
-			});
-			return res.data;
-		},
+		mutationFn: async (data: FormData) => await loginAction(data),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["user"] });
 		},

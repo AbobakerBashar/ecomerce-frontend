@@ -18,29 +18,23 @@ const SignupForm = () => {
 
 	const redirect = searchParams.get("redirect") || "/";
 
-	const [name, setName] = useState("");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
 	const [error, setError] = useState<Record<string, string> | null>(null);
 
 	const { mutateAsync: signup, isPending: isCreating } = useSignup();
 
-	async function onSubmit(e: React.FormEvent) {
-		e.preventDefault();
-
+	const onSubmit = async (data: FormData): Promise<void> => {
 		if (isCreating) return;
 
-		if (!name || !email || !password)
-			return toast.error("Please fill all fields");
+		if (!data.get("name") || !data.get("email") || !data.get("password")) {
+			toast.error("Please fill all fields");
+
+			return;
+		}
 
 		setError(null);
 
 		try {
-			const res = await signup({
-				name,
-				email,
-				password,
-			});
+			const res = await signup(data);
 			if (res.success) toast.success(`Welcome ${res.user?.name}!`);
 
 			router.replace(redirect);
@@ -51,10 +45,10 @@ const SignupForm = () => {
 				setError({ internalErr: error.message });
 			else setError({ internalErr: "Unknown error" });
 		}
-	}
+	};
 
 	return (
-		<form className="mt-6 space-y-4" onSubmit={onSubmit}>
+		<form className="mt-6 space-y-4" action={onSubmit}>
 			<div className="space-y-2">
 				<Label className="text-sm font-medium" htmlFor="name">
 					Name
@@ -63,8 +57,7 @@ const SignupForm = () => {
 					id="name"
 					type="text"
 					placeholder="John Doe"
-					value={name}
-					onChange={(e) => setName(e.target.value)}
+					name="name"
 					required
 				/>
 				{error?.name && (
@@ -80,8 +73,7 @@ const SignupForm = () => {
 					id="email"
 					type="email"
 					placeholder="you@example.com"
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
+					name="email"
 					required
 				/>
 				{error?.email && (
@@ -97,8 +89,7 @@ const SignupForm = () => {
 					id="password"
 					type="password"
 					placeholder="••••••••"
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
+					name="password"
 					required
 				/>
 				{error?.password && (

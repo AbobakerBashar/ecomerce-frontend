@@ -18,8 +18,6 @@ const fetchOrder = async (
 		return res;
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
-			console.log("Status:", error.response?.status);
-			console.log("Response:", error.response?.data);
 			throw new Error(error.response?.data?.message || "Faild to load order.");
 		} else {
 			console.log(error);
