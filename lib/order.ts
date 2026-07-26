@@ -5,6 +5,10 @@ const API_URL = process.env.NEXT_PUBLIC_BASE_ENDPOINT;
 
 export const getOrder = async (session_id: string) => {
 	const cookieStore = await cookies();
+
+	console.log("Cookies:", cookieStore.getAll());
+	console.log("Cookie header:", cookieStore.toString());
+
 	await axios.get(`${API_URL}/ux`);
 	const res = await axios.get(`${API_URL}/orders/${session_id}`, {
 		headers: {

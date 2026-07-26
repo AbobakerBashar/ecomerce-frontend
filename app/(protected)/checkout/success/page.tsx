@@ -1,6 +1,7 @@
 import CheckoutSuccess from "@/components/checkout/CheckoutSuccess";
 import { getOrder } from "@/lib/order";
 import { OrderResponse } from "@/types/order";
+import axios from "axios";
 import { notFound } from "next/navigation";
 
 export const metadata = {
@@ -16,8 +17,15 @@ const fetchOrder = async (
 		if (!session_id) notFound();
 		return res;
 	} catch (error) {
-		console.log(error);
-		return null;
+		if (axios.isAxiosError(error)) {
+			console.log("Status:", error.response?.status);
+			console.log("Response:", error.response?.data);
+			throw new Error(error.response?.data?.message || "Faild to load order.");
+		} else {
+			console.log(error);
+		}
+
+		throw error;
 	}
 };
 
