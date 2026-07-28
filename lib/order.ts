@@ -14,10 +14,12 @@ export const getOrder = async (session_id: string) => {
 	return res.data;
 };
 
-export const getAllOrders = async (params: string) => {
+export const getAllOrders = async (params: string = "", limit: number = 15) => {
 	const cookieStore = await cookies();
 	const res = await axios.get(
-		params ? `${API_URL}/orders?${params}` : `${API_URL}/orders`,
+		params
+			? `${API_URL}/orders?${params}&limit=${limit}`
+			: `${API_URL}/orders?limit=${limit}`,
 		{
 			headers: {
 				cookie: cookieStore.toString(),
@@ -27,13 +29,12 @@ export const getAllOrders = async (params: string) => {
 	return res.data;
 };
 
-export const getTotalOrders = async () => {
+export const getOrdersStats = async () => {
 	const cookieStore = await cookies();
-	const res = await axios.get(`${API_URL}/orders/total`, {
+	const res = await axios.get(`${API_URL}/orders/status`, {
 		headers: {
 			cookie: cookieStore.toString(),
 		},
 	});
-	console.log(res);
 	return res.data;
 };

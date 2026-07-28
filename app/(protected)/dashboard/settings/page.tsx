@@ -1,24 +1,34 @@
-import { Card } from "@/components/ui/card";
+import SettingsContent from "@/components/dashboard/SettingsContent";
+import { getUserAction } from "@/lib/auth";
+import axios from "axios";
 
-export default function SettingsPage() {
+const loadUser = async () => {
+	try {
+		const res = await getUserAction();
+		if (res.success) return res.user;
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			if (error.status === 500) throw new Error("Internal server error");
+			throw new Error(error.response?.data?.message || "Faild to load user");
+		}
+	}
+};
+
+export const revalidate = 0;
+
+export default async function SettingsPage() {
+	const user = await loadUser();
+
 	return (
-		<div className="space-y-4">
-			<Card className="p-4">
-				<h2 className="text-lg font-semibold">Settings</h2>
+		<div className="space-y-6">
+			<div>
+				<h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
 				<p className="mt-1 text-sm text-muted-foreground">
-					Profile and preferences (demo).
+					Manage your profile and account security.
 				</p>
-			</Card>
+			</div>
 
-			<Card className="p-4">
-				<div className="space-y-2">
-					<p className="text-sm font-medium">Profile</p>
-					<p className="text-sm text-muted-foreground">
-						This project has no backend/auth integration. Wire these fields to
-						your data layer when you add persistence.
-					</p>
-				</div>
-			</Card>
+			<SettingsContent user={user} />
 		</div>
 	);
 }

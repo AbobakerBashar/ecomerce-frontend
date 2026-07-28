@@ -50,7 +50,6 @@ const DashboardSidebar = () => {
 						<p className="text-sm font-semibold">Account</p>
 						<p className="text-xs text-muted-foreground">Manage your profile</p>
 					</div>
-					<Badge variant="outline">Demo</Badge>
 				</div>
 
 				<Separator className="my-4" />
@@ -81,11 +80,6 @@ const DashboardSidebar = () => {
 						active={pathname === "/dashboard/addresses"}
 					/>
 				</nav>
-
-				<Separator className="my-4" />
-				<p className="text-xs text-muted-foreground">
-					This repo doesn’t include a backend—data is demo-only.
-				</p>
 			</Card>
 		</aside>
 	);

@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import axios from "axios";
+import { ChangePasswordInput, UpdateProfileInput } from "@/types/user";
 
 const baseEndpoint = process.env.NEXT_PUBLIC_BASE_ENDPOINT || "";
 
@@ -63,4 +64,71 @@ export async function getUserAction() {
 	});
 
 	return res.data;
+}
+
+export async function updateProfileAction(payload: UpdateProfileInput) {
+	const cookieStore = await cookies();
+	const token = cookieStore.get("jwt")?.value;
+
+	if (!token) throw new Error("Not authenticated");
+
+	try {
+		const res = await axios.patch(`${baseEndpoint}/users/me`, payload, {
+			headers: {
+				Cookie: `jwt=${token}`,
+			},
+		});
+
+		return res.data;
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			return {
+				success: false,
+				status: error.response?.status,
+				message: error.response?.data?.message,
+				errors: error.response?.data?.errors,
+			};
+		}
+
+		return {
+			success: false,
+			message: "Something went wrong",
+		};
+	}
+}
+
+export async function changePasswordAction(payload: ChangePasswordInput) {
+	const cookieStore = await cookies();
+	const token = cookieStore.get("jwt")?.value;
+
+	if (!token) throw new Error("Not authenticated");
+
+	try {
+		const res = await axios.patch(
+			`${baseEndpoint}/users/reset-password`,
+			payload,
+			{
+				headers: {
+					Cookie: `jwt=${token}`,
+				},
+			},
+		);
+
+		cookieStore.delete("jwt");
+		return res.data;
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			return {
+				success: false,
+				status: error.response?.status,
+				message: error.response?.data?.message,
+				errors: error.response?.data?.errors,
+			};
+		}
+
+		return {
+			success: false,
+			message: "Something went wrong",
+		};
+	}
 }

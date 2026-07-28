@@ -1,32 +1,9 @@
-# Loading & Error Pages Implementation - COMPLETED ✅
+# Dashboard/Settings Redesign - TODO
 
-## Loading Pages (loading.tsx)
+## Steps
 
-- [x] `app/(public)/loading.tsx`
-- [x] `app/(public)/collections/[slug]/loading.tsx`
-- [x] `app/(protected)/loading.tsx`
-- [x] `app/(protected)/cart/loading.tsx`
-- [x] `app/(protected)/checkout/loading.tsx`
-- [x] `app/(protected)/dashboard/loading.tsx`
-- [x] `app/(protected)/dashboard/orders/loading.tsx`
-- [x] `app/auth/loading.tsx`
-- [x] `app/admin/loading.tsx`
-- [x] `app/admin/products/loading.tsx`
-
-## Error Pages (error.tsx)
-
-- [x] `app/(public)/error.tsx`
-- [x] `app/(public)/collections/error.tsx`
-- [x] `app/(public)/collections/[slug]/error.tsx`
-- [x] `app/(protected)/error.tsx`
-- [x] `app/(protected)/cart/error.tsx`
-- [x] `app/(protected)/checkout/error.tsx`
-- [x] `app/(protected)/dashboard/error.tsx`
-- [x] `app/(protected)/dashboard/orders/error.tsx`
-- [x] `app/auth/error.tsx`
-- [x] `app/admin/error.tsx`
-- [x] `app/admin/products/error.tsx`
-
-## Fixes
-
-- [x] Fix typo in `app/(public)/collections/loading.tsx` ("Collectoons" → "Collections")
+- [x] Step 1: Add `UpdateProfileInput` and `ChangePasswordInput` types to `types/user.ts`
+- [x] Step 2: Add `updateProfileAction` and `changePasswordAction` server actions to `lib/auth.ts`
+- [x] Step 3: Add `useUpdateProfile()` and `useChangePassword()` hooks to `hooks/user.ts`
+- [x] Step 4: Redesign `app/(protected)/dashboard/settings/page.tsx` with Profile + Password tabs
+- [x] Step 5: Redirect `/dashboard/profile` to `/dashboard/settings`
