@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 
+import DashboardMobileNav from "@/components/dashboard/DashboardMobileNav";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 
 export const metadata = {
@@ -23,6 +24,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 								</p>
 							</div>
 						</div>
+
+						<DashboardMobileNav />
 
 						<div className="mt-4">{children}</div>
 					</section>

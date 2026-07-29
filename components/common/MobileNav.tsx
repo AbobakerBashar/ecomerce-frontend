@@ -123,7 +123,7 @@ export default function MobileNav({
 						<>
 							<SheetClose>
 								<Link
-									href="/dashboard/account"
+									href="/dashboard/settings "
 									className="px-4 py-2 text-sm font-medium rounded-md text-text-mid hover:bg-secondary hover:text-primary transition-colors w-full inline-flex items-center gap-2"
 									onClick={() => setIsOpen(false)}
 								>

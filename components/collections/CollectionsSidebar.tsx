@@ -76,7 +76,7 @@ const CollectionsSidebar = ({
 									className="justify-between cursor-pointer"
 									onClick={() => updateQuery("category", category)}
 								>
-									{category}
+									{category.at(0)?.toUpperCase() + category.slice(1)}
 								</Button>
 							))}
 						</div>

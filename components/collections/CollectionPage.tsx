@@ -25,7 +25,7 @@ type Props = {
 
 export default function CollectionPage({ products, pagination }: Props) {
 	const categoryOptions = Array.from(
-		new Set(products.map((product) => product.category.name)),
+		new Set(products.map((product) => product.category.slug)),
 	).sort();
 
 	const brandOptions = Array.from(

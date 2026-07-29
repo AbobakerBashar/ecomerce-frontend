@@ -41,8 +41,6 @@ const fetchProducts = async (
 			products: [],
 		};
 	} catch (error) {
-		console.log(error);
-
 		if (axios.isAxiosError(error)) {
 			console.log(error.response?.data);
 		}

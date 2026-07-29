@@ -19,7 +19,8 @@ const ThemeToggle = dynamic(() => import("./ThemeToggle"), {
 	ssr: false,
 });
 
-const isActive = (pathname: string, route: string) => route === pathname;
+const isActive = (pathname: string, route: string) =>
+	route === "/dashboard" ? pathname.startsWith(route) : route === pathname;
 
 const routes = [
 	{ label: "Home", route: "/" },
@@ -102,7 +103,7 @@ const Header = () => {
 								</Button>
 							)}
 							<Link
-								href="/account"
+								href="/dashboard/settings"
 								className="hidden sm:inline-flex items-center justify-center border border-border bg-secondary p-2 text-muted-foreground transition w-8.5 h-8.5 rounded-full"
 							>
 								<User className="h-4 w-4" />

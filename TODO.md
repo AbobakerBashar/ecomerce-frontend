@@ -1,9 +1,9 @@
-# Dashboard/Settings Redesign - TODO
+# TODO - Dashboard Mobile Navigation
 
-## Steps
+## Steps to Complete
 
-- [x] Step 1: Add `UpdateProfileInput` and `ChangePasswordInput` types to `types/user.ts`
-- [x] Step 2: Add `updateProfileAction` and `changePasswordAction` server actions to `lib/auth.ts`
-- [x] Step 3: Add `useUpdateProfile()` and `useChangePassword()` hooks to `hooks/user.ts`
-- [x] Step 4: Redesign `app/(protected)/dashboard/settings/page.tsx` with Profile + Password tabs
-- [x] Step 5: Redirect `/dashboard/profile` to `/dashboard/settings`
+- [x] 1. Analyze the issue: Dashboard sidebar is hidden on mobile (`hidden lg:block`)
+- [x] 2. Plan approved by user
+- [x] 3. Create `components/dashboard/DashboardMobileNav.tsx`
+- [x] 4. Update `app/(protected)/dashboard/layout.tsx` to include DashboardMobileNav
+- [x] 5. Verify the build compiles successfully (running in background)
