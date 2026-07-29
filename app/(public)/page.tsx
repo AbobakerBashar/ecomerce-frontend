@@ -5,7 +5,6 @@ import FeaturedProducts from "@/components/home/FeaturedProducts";
 import SocialProof from "@/components/home/SocialProof";
 import ShopByCategory from "@/components/home/ShopByCategory";
 import NewArrivals from "@/components/home/NewArrivals";
-import UGC from "@/components/home/UGC";
 import { Suspense } from "react";
 import { Spinner } from "@/components/ui/spinner";
 
@@ -32,8 +31,6 @@ export default function Home() {
 			</Suspense>
 
 			<Collections />
-
-			<UGC />
 
 			<Contact />
 		</div>

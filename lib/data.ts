@@ -1,3 +1,5 @@
+import { RealCustomerPhoto } from "@/types/product";
+
 export const products = [
 	{
 		id: "1",

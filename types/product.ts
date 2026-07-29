@@ -126,3 +126,15 @@ export type Pagination = {
 	totalPages: number;
 	currentPage: number;
 };
+
+export type RealCustomerPhoto = {
+	id: string;
+	name: string;
+	slug: string;
+	brand: string;
+	category: string;
+	image_url: string;
+	alt_text: string;
+	customer_name: string;
+	handle: string;
+};
