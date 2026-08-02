@@ -27,7 +27,6 @@ const routes = [
 	{ label: "Collections", route: "/collections" },
 	{ label: "About", route: "/about" },
 	{ label: "Contact", route: "/contact" },
-	{ label: "Dashboard", route: "/dashboard" },
 ];
 
 const Header = () => {
@@ -78,6 +77,14 @@ const Header = () => {
 									{route.label}
 								</Link>
 							))}
+							{isAuthenticated && (
+								<Link
+									href="/dashboard"
+									className={`hover:text-primary ${isActive(pathname, "dashboard") ? "text-primary" : "text-text-mid"}`}
+								>
+									Dashboard
+								</Link>
+							)}
 						</nav>
 					)}
 

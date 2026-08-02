@@ -9,6 +9,7 @@ import {
 	MessageCircle,
 	ShoppingBag,
 	User,
+	LayoutDashboard,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -41,11 +42,7 @@ const routes = [
 		route: "/contact",
 		icon: <MessageCircle className="w-4 h-4" />,
 	},
-	{
-		label: "Dashboard",
-		route: "/dashboard",
-		icon: <ClipboardList className="w-4 h-4" />,
-	},
+
 	{
 		label: "Cart",
 		route: "/cart",
@@ -122,6 +119,14 @@ export default function MobileNav({
 					{isAuthenticated && (
 						<>
 							<SheetClose>
+								<Link
+									href="/dashboard "
+									className="px-4 py-2 text-sm font-medium rounded-md text-text-mid hover:bg-secondary hover:text-primary transition-colors w-full inline-flex items-center gap-2"
+									onClick={() => setIsOpen(false)}
+								>
+									<LayoutDashboard className="h-4 w-4" />
+									<span>Overview</span>
+								</Link>
 								<Link
 									href="/dashboard/settings "
 									className="px-4 py-2 text-sm font-medium rounded-md text-text-mid hover:bg-secondary hover:text-primary transition-colors w-full inline-flex items-center gap-2"

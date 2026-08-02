@@ -54,12 +54,6 @@ export interface UserResponse {
 	errors?: object;
 }
 
-export interface AuthApiError {
-	success: boolean;
-	errors?: Record<string, string>;
-	message?: string;
-}
-
 export interface LoginInput {
 	email: string;
 	password: string;

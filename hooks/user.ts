@@ -7,14 +7,19 @@ import {
 	updateProfileAction,
 	changePasswordAction,
 } from "@/lib/auth";
-import { ChangePasswordInput, UpdateProfileInput } from "@/types/user";
+import {
+	ChangePasswordInput,
+	LoginInput,
+	RegisterInput,
+	UpdateProfileInput,
+} from "@/types/user";
 
 export const useSignup = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
 		mutationKey: ["register"],
-		mutationFn: async (data: FormData) => await registerAction(data),
+		mutationFn: async (data: RegisterInput) => await registerAction(data),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["user"] });
 		},
@@ -48,7 +53,7 @@ export const useSignin = () => {
 
 	return useMutation({
 		mutationKey: ["login"],
-		mutationFn: async (data: FormData) => await loginAction(data),
+		mutationFn: async (data: LoginInput) => await loginAction(data),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["user"] });
 		},

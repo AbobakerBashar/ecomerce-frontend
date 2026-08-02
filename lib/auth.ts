@@ -2,47 +2,96 @@
 
 import { cookies } from "next/headers";
 import axios from "axios";
-import { ChangePasswordInput, UpdateProfileInput } from "@/types/user";
+import {
+	ChangePasswordInput,
+	LoginInput,
+	RegisterInput,
+	UpdateProfileInput,
+} from "@/types/user";
 
 const baseEndpoint = process.env.NEXT_PUBLIC_BASE_ENDPOINT || "";
 
-export async function loginAction(data: FormData) {
-	const res = await axios.post(`${baseEndpoint}/users/login`, {
-		email: data.get("email"),
-		password: data.get("password"),
-	});
-	const token = res.data.token;
+export async function loginAction(data: LoginInput) {
+	try {
+		const res = await axios.post(`${baseEndpoint}/users/login`, data);
+		const token = res.data.token;
 
-	const cookieStore = await cookies();
-	cookieStore.set("jwt", token, {
-		httpOnly: true,
-		secure: process.env.NODE_ENV === "production",
-		sameSite: "lax",
-		path: "/",
-		maxAge: 3 * 24 * 60 * 60,
-	});
+		const cookieStore = await cookies();
+		cookieStore.set("jwt", token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "lax",
+			path: "/",
+			maxAge: 3 * 24 * 60 * 60,
+		});
 
-	return res.data;
+		return res.data;
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			if (error.response?.status === 500)
+				return {
+					success: false,
+					message: "Internal server error. Please try again later",
+				};
+			if (error.response?.data?.errors)
+				return {
+					success: false,
+					errors: error.response.data.errors,
+				};
+			return {
+				success: false,
+				message:
+					error.response?.data?.message ||
+					"Somthig went wrong. Please try agin later",
+			};
+		} else {
+			return {
+				success: false,
+				message: "Somthig went wrong. Please try agin later",
+			};
+		}
+	}
 }
 
-export async function registerAction(data: FormData) {
-	const res = await axios.post(`${baseEndpoint}/users/register`, {
-		password: data.get("password"),
-		name: data.get("name"),
-		email: data.get("email"),
-	});
-	const token = res.data.token;
+export async function registerAction(data: RegisterInput) {
+	try {
+		const res = await axios.post(`${baseEndpoint}/users/register`, data);
+		const token = res.data.token;
 
-	const cookieStore = await cookies();
-	cookieStore.set("jwt", token, {
-		httpOnly: true,
-		secure: process.env.NODE_ENV === "production",
-		sameSite: "lax",
-		path: "/",
-		maxAge: 3 * 24 * 60 * 60,
-	});
-
-	return res.data;
+		const cookieStore = await cookies();
+		cookieStore.set("jwt", token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "lax",
+			path: "/",
+			maxAge: 3 * 24 * 60 * 60,
+		});
+		return res.data;
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			if (error.response?.status === 500)
+				return {
+					success: false,
+					message: "Internal server error. Please try again later",
+				};
+			if (error.response?.data?.errors)
+				return {
+					success: false,
+					errors: error.response.data.errors,
+				};
+			return {
+				success: false,
+				message:
+					error.response?.data?.message ||
+					"Somthig went wrong. Please try agin later",
+			};
+		} else {
+			return {
+				success: false,
+				message: "Somthig went wrong. Please try agin later",
+			};
+		}
+	}
 }
 
 export async function logoutAction() {

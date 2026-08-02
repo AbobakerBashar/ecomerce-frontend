@@ -7,8 +7,7 @@ import Link from "next/link";
 import { useSignup } from "@/hooks/user";
 import { Loader } from "lucide-react";
 import { Label } from "../ui/label";
-import axios from "axios";
-import { AuthApiError } from "@/types/user";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
@@ -18,37 +17,42 @@ const SignupForm = () => {
 
 	const redirect = searchParams.get("redirect") || "/";
 
-	const [error, setError] = useState<Record<string, string> | null>(null);
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [name, setName] = useState("");
+	const [errors, setErrors] = useState<Record<string, string> | null>(null);
 
 	const { mutateAsync: signup, isPending: isCreating } = useSignup();
 
-	const onSubmit = async (data: FormData): Promise<void> => {
+	const onSubmit = async (e: React.FormEvent): Promise<void> => {
+		e.preventDefault();
+
 		if (isCreating) return;
 
-		if (!data.get("name") || !data.get("email") || !data.get("password")) {
+		if (!name || !password || !email) {
 			toast.error("Please fill all fields");
 
 			return;
 		}
 
-		setError(null);
+		setErrors(null);
 
-		try {
-			const res = await signup(data);
-			if (res.success) toast.success(`Welcome ${res.user?.name}!`);
-
+		const res = await signup({
+			email,
+			name,
+			password,
+		});
+		if (res.success) {
+			toast.success(`Welcome ${res.user?.name}!`);
 			router.replace(redirect);
-		} catch (error) {
-			if (axios.isAxiosError<AuthApiError>(error)) {
-				setError(error.response?.data.errors ?? {});
-			} else if (error instanceof Error)
-				setError({ internalErr: error.message });
-			else setError({ internalErr: "Unknown error" });
+		} else {
+			if (res.errors) setErrors(res.errors);
+			else setErrors({ general: res.message });
 		}
 	};
 
 	return (
-		<form className="mt-6 space-y-4" action={onSubmit}>
+		<form className="mt-6 space-y-4" onSubmit={onSubmit}>
 			<div className="space-y-2">
 				<Label className="text-sm font-medium" htmlFor="name">
 					Name
@@ -57,11 +61,11 @@ const SignupForm = () => {
 					id="name"
 					type="text"
 					placeholder="John Doe"
-					name="name"
+					onChange={(e) => setName(e.target.value)}
 					required
 				/>
-				{error?.name && (
-					<p className="text-sm text-destructive">{error.name}</p>
+				{errors?.name && (
+					<p className="text-sm text-destructive">{errors.name}</p>
 				)}
 			</div>
 
@@ -73,11 +77,11 @@ const SignupForm = () => {
 					id="email"
 					type="email"
 					placeholder="you@example.com"
-					name="email"
+					onChange={(e) => setEmail(e.target.value)}
 					required
 				/>
-				{error?.email && (
-					<p className="text-sm text-destructive">{error.email}</p>
+				{errors?.email && (
+					<p className="text-sm text-destructive">{errors.email}</p>
 				)}
 			</div>
 
@@ -89,19 +93,19 @@ const SignupForm = () => {
 					id="password"
 					type="password"
 					placeholder="••••••••"
-					name="password"
+					onChange={(e) => setPassword(e.target.value)}
 					required
 				/>
-				{error?.password && (
-					<p className="text-sm text-destructive">{error.password}</p>
+				{errors?.password && (
+					<p className="text-sm text-destructive">{errors.password}</p>
 				)}
 			</div>
 
-			{error?.internalErr || error?.message ? (
+			{errors?.general && (
 				<p className="text-sm text-destructive">
-					Internal server error: {error.internalErr || error.message}
+					Internal server error: {errors.general}
 				</p>
-			) : null}
+			)}
 
 			<Button
 				type="submit"

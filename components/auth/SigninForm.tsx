@@ -7,7 +7,6 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useSignin } from "@/hooks/user";
-import axios from "axios";
 import { Loader } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -16,38 +15,41 @@ const SigninForm = () => {
 	const router = useRouter();
 	const redirect = searchParams.get("redirect") || "/";
 
-	const [error, setError] = useState<Record<string, string> | null>(null);
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+
+	const [errors, setErrors] = useState<Record<string, string> | null>(null);
 
 	const { mutateAsync: signin, isPending: isLoggingIn } = useSignin();
 
-	const onSubmit = async (data: FormData): Promise<void> => {
-		setError(null);
+	const onSubmit = async (e: React.FormEvent): Promise<void> => {
+		e.preventDefault();
+
+		setErrors(null);
 
 		if (isLoggingIn) return;
 
-		if (!data.get("email") || !data.get("password")) {
+		if (!email || !password) {
 			toast.error("Please enter email and password.");
 			return;
 		}
 
-		try {
-			const res = await signin(data);
-			if (res.success) {
-				toast.success(`Welcome back ${res.user?.name}!`);
-				router.replace(redirect);
-			}
-		} catch (error) {
-			if (axios.isAxiosError(error)) {
-				console.log(error.response?.data.errors);
-				setError(error.response?.data.errors ?? {});
-			} else if (error instanceof Error)
-				setError({ internalErr: error.message });
-			else setError({ internalErr: "Unknown error" });
+		const res = await signin({
+			password,
+			email,
+		});
+
+		if (res.success) {
+			toast.success(`Welcome back ${res.user?.name}!`);
+			router.replace(redirect);
+		} else {
+			if (res.errors) setErrors(res.errors ?? {});
+			else setErrors({ general: res.message });
 		}
 	};
 
 	return (
-		<form className="mt-6 space-y-4" action={onSubmit}>
+		<form className="mt-6 space-y-4" onSubmit={onSubmit}>
 			<div className="space-y-2">
 				<Label className="text-sm font-medium" htmlFor="email">
 					Email
@@ -56,11 +58,11 @@ const SigninForm = () => {
 					id="email"
 					type="email"
 					placeholder="you@example.com"
-					name="email"
+					onChange={(e) => setEmail(e.target.value)}
 					required
 				/>
-				{error?.email && (
-					<p className="text-sm text-destructive">{error.email}</p>
+				{errors?.email && (
+					<p className="text-sm text-destructive">{errors.email}</p>
 				)}
 			</div>
 
@@ -72,20 +74,17 @@ const SigninForm = () => {
 					id="password"
 					type="password"
 					placeholder="••••••••"
-					name="password"
+					onChange={(e) => setPassword(e.target.value)}
 					required
 				/>
-				{error?.password && (
-					<p className="text-sm text-destructive">{error.password}</p>
+				{errors?.password && (
+					<p className="text-sm text-destructive">{errors.password}</p>
 				)}
 			</div>
 
-			{error?.internalErr ||
-				(error?.message && (
-					<p className="text-sm text-destructive">
-						{error.internalErr || error.message}
-					</p>
-				))}
+			{errors?.general && (
+				<p className="text-sm text-destructive">{errors.general}</p>
+			)}
 
 			<Button type="submit" className="w-full" disabled={isLoggingIn}>
 				{isLoggingIn ? (
