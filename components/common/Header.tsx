@@ -4,8 +4,8 @@ import { motion } from "motion/react";
 
 import { Search, ShoppingBag, User, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import Logo from "./Logo";
@@ -31,6 +31,7 @@ const routes = [
 
 const Header = () => {
 	const pathname = usePathname();
+	const router = useRouter();
 
 	const { data: count } = useGetCartItemCount();
 	const { data: user, isLoading } = useGetUser();
@@ -39,6 +40,22 @@ const Header = () => {
 
 	const isAuthenticated = !isLoading && !!user;
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+	const [search, setSearch] = useState("");
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			if (search.trim()) {
+				router.replace(
+					`/collections?search=${encodeURIComponent(search.trim())}`,
+				);
+			} else {
+				router.replace(pathname);
+			}
+		}, 500);
+
+		return () => clearTimeout(timer);
+	}, [search, router, pathname]);
 
 	return (
 		<motion.header
@@ -60,8 +77,9 @@ const Header = () => {
 							<div className="flex-1 min-w-0">
 								<Input
 									type="search"
-									placeholder="Search products, brands, categories..."
+									placeholder="Search products, brands or categories"
 									autoFocus
+									onChange={(e) => setSearch(e.target.value)}
 									className="h-10 border-border bg-background px-3 py-2 text-sm"
 								/>
 							</div>
@@ -133,14 +151,25 @@ const Header = () => {
 						</div>
 					) : (
 						<div className="flex items-center gap-3">
-							<Button
-								onClick={() => setIsSearchOpen(true)}
-								size="sm"
-								variant="outline"
-								className="inline-flex items-center justify-center border border-border bg-secondary p-2 text-muted-foreground transition w-8.5 h-8.5 rounded-full cursor-pointer"
-							>
-								<Search className="h-4 w-4" />
-							</Button>
+							{isSearchOpen ? (
+								<Button
+									size="sm"
+									variant="outline"
+									onClick={() => setIsSearchOpen(false)}
+									className="inline-flex items-center justify-center border border-border bg-secondary p-2 text-muted-foreground transition w-8.5 h-8.5 rounded-full mr-2 cursor-pointer ml-2"
+								>
+									<X className="h-4 w-4" />
+								</Button>
+							) : (
+								<Button
+									onClick={() => setIsSearchOpen(true)}
+									size="sm"
+									variant="ghost"
+									className="inline-flex items-center justify-center border border-border bg-secondary p-2 text-muted-foreground transition w-8.5 h-8.5 rounded-full"
+								>
+									<Search className="h-4 w-4" />
+								</Button>
+							)}
 							<ThemeToggle className="hidden sm:inline-flex items-center justify-center border border-border bg-secondary p-2 text-muted-foreground transition w-8.5 h-8.5 rounded-full cursor-pointer hover:text-primary hover:border-primary hover:bg-secondary" />
 							<Link href="/auth/signin" className="hidden sm:inline-block">
 								<Button

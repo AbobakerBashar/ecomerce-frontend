@@ -119,6 +119,7 @@ export type SearchParams = {
 	page?: string;
 	size?: string[] | string;
 	color?: string[] | string;
+	search?: string;
 };
 
 export type Pagination = {

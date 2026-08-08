@@ -25,7 +25,8 @@ export async function getCategories() {
 }
 
 export async function getProducts(queryParams: string = "") {
-	const res = await axios.get(`${API_URL}/products?${queryParams}`);
+	const query = queryParams ? `?${queryParams}` : "";
+	const res = await axios.get(`${API_URL}/products${query}`);
 
 	return res.data;
 }

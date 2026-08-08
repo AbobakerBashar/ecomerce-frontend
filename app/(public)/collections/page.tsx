@@ -16,19 +16,21 @@ const fetchProducts = async (
 	pagination: Pagination;
 	products: FullProduct[];
 }> => {
-	const params = new URLSearchParams();
-
-	Object.entries(searchParams).forEach(([key, value]) => {
-		if (!value) return;
-
-		if (Array.isArray(value)) {
-			value.forEach((v) => params.append(key, v));
-		} else {
-			params.append(key, value);
-		}
-	});
-
 	try {
+		const params = new URLSearchParams();
+
+		if (searchParams.search) {
+			params.append("search", searchParams.search);
+		} else
+			Object.entries(searchParams).forEach(([key, value]) => {
+				if (!value) return;
+
+				if (Array.isArray(value)) {
+					value.forEach((v) => params.append(key, v));
+				} else {
+					params.append(key, value);
+				}
+			});
 		const res = await getProducts(params.toString());
 		if (res.success)
 			return { products: res.products, pagination: res.pagination };
@@ -60,7 +62,8 @@ type Props = {
 };
 
 export default async function CollectionsRoute({ searchParams }: Props) {
-	const { category, brand, sort, page, size, color } = await searchParams;
+	const { category, brand, sort, page, size, color, search } =
+		await searchParams;
 
 	const { products, pagination } = await fetchProducts({
 		category,
@@ -69,6 +72,7 @@ export default async function CollectionsRoute({ searchParams }: Props) {
 		page,
 		size,
 		color,
+		search,
 	});
 
 	return <CollectionPage products={products} pagination={pagination} />;

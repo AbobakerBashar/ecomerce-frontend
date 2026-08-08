@@ -35,7 +35,7 @@ export default function HeroSection() {
 				initial={{ opacity: 0, y: 24 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.9, delay: 0.1, ease: "easeOut" }}
-				className="relative mx-auto flex min-h-[85vh] max-w-7xl items-center px-6 py-16 lg:px-8"
+				className="relative mx-auto flex min-h-[85vh] max-w-7xl items-center px-6 py-14 lg:px-8"
 			>
 				<div className="max-w-2xl space-y-6 text-white">
 					<Badge className="inline-flex items-center gap-3 border border-white/20 bg-white/10 px-4 py-4 text-sm font-semibold backdrop-blur-sm">
